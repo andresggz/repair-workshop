@@ -57,10 +57,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @ManyToOne
     private User createdBy;
 
     private LocalDateTime createdAt;
 
+    @ManyToOne
     private User updatedBy;
 
     private LocalDateTime updatedAt;
