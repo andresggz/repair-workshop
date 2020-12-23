@@ -1,5 +1,6 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.domain;
 
+import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Table(name = "repair_lines")
 @Data
@@ -24,6 +26,9 @@ public class RepairLine {
     @NotBlank
     @Size(min = 3, max = 50)
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<SpareItem> spareItems;
 
     private BigDecimal workforcePrice;
 
