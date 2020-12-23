@@ -8,35 +8,30 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
 
-@Entity
-@Table(name = "repairs")
+@Table(name = "repair_lines")
 @Data
 @Generated
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Repair {
+public class RepairLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private RepairState state;
-
     @NotBlank
     @Size(min = 3, max = 50)
-    private String commentary;
+    private String description;
 
-    @ManyToMany
-    private Set<User> repairmen;
+    private BigDecimal workforcePrice;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<RepairLine> repairLines;
+    private BigDecimal spareTotalPrice;
 
-    private BigDecimal totalPrice;
+    private LocalDateTime startedAt;
 
+    private LocalDateTime finishedAt;
 
     @ManyToOne
     private User createdBy;
@@ -47,5 +42,4 @@ public class Repair {
     private User updatedBy;
 
     private LocalDateTime updatedAt;
-
 }
