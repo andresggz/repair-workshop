@@ -4,6 +4,7 @@ import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -23,11 +24,17 @@ public class SpareItem {
     @ManyToOne
     private Spare spare;
 
+    @NotNull
     private BigDecimal unitPrice;
+
+    @NotNull
+    private BigDecimal unitCost;
 
     private Long quantity;
 
     private BigDecimal totalPrice;
+
+    private BigDecimal totalCost;
 
     @ManyToOne
     private User createdBy;

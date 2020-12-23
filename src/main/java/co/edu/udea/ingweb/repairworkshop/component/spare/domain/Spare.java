@@ -33,7 +33,9 @@ public class Spare {
     private String description;
 
     @NotNull
-    private BigDecimal price;
+    private BigDecimal unitPrice;
+
+    @NotNull BigDecimal unitCost;
 
     private Long stock;
 

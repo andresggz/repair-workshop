@@ -32,7 +32,9 @@ public class RepairLine {
 
     private BigDecimal workforcePrice;
 
-    private BigDecimal spareTotalPrice;
+    private BigDecimal totalSparePrice;
+
+    private BigDecimal totalSpareCost;
 
     private LocalDateTime startedAt;
 

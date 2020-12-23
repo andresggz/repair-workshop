@@ -32,11 +32,15 @@ public class Repair {
     @ManyToMany
     private Set<User> repairmen;
 
+    @ManyToOne
+    private User ownerEnteredBy;
+
     @OneToMany(cascade = CascadeType.ALL)
     private Set<RepairLine> repairLines;
 
     private BigDecimal totalPrice;
 
+    private BigDecimal totalCost;
 
     @ManyToOne
     private User createdBy;
