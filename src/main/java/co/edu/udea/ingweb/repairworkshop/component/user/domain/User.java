@@ -26,7 +26,7 @@ public class User {
     @NotNull
     @NotBlank
     @Size(min = 3, max = 10)
-    private String identificationCard;
+    private String dni;
 
     @NotNull
     @NotBlank
@@ -55,12 +55,14 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Role role;
 
     @ManyToOne
     private User createdBy;
 
     private LocalDateTime createdAt;
+
+    private boolean active;
 
     @ManyToOne
     private User updatedBy;
