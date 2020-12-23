@@ -23,8 +23,7 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private Maker maker;
 
     @NotNull
