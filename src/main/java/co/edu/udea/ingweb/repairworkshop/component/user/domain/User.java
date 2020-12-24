@@ -51,7 +51,6 @@ public class User {
 
     @NotNull
     @NotBlank
-    @Size(min = 8, max = 45)
     private String password;
 
     @Enumerated(EnumType.STRING)

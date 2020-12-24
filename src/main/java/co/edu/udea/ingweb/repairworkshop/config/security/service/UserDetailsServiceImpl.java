@@ -25,21 +25,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(final String id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        User userFound = userRepository.findById(Long.valueOf(id))
+        User userFound = userRepository.findByPrimaryEmailAddress(email)
                 .orElseThrow(() -> new RuntimeException("Cambiar esto...."));
 
-        return this.userBuilder(userFound.getId(), userFound.getPassword(), new Role[]{Role.AUTHENTICATED}, userFound.isActive());
+        return this.userBuilder(userFound.getPrimaryEmailAddress(), userFound.getPassword(),
+                new Role[]{Role.AUTHENTICATED}, userFound.isActive());
     }
 
-    private org.springframework.security.core.userdetails.User userBuilder(Long id, String password,
+    private org.springframework.security.core.userdetails.User userBuilder(String email, String password,
                                                                            Role[] roles, boolean active){
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role)));
 
-        return new org.springframework.security.core.userdetails.User(String.valueOf(id), password, active,
+        return new org.springframework.security.core.userdetails.User(email, password, active,
                 true, true, true, authorities);
     }
 }

@@ -11,8 +11,8 @@ import java.util.Optional;
 @Service
 public class JwtService {
     private static final String BEARER = "Bearer ";
-    private static final String USER_CLAIM = "user";
-    private static final String NAME_CLAIM = "name";
+    private static final String USER_EMAIL_CLAIM = "userEmail";
+    private static final String USER_ID_CLAIM = "userId";
     private static final String ROLE_CLAIM = "role";
 
     private final String secret = "SUPER_SECRET";
@@ -35,28 +35,28 @@ public class JwtService {
         }
     }
 
-    public String createToken(String user, String name, String role) {
+    public String createToken(String userEmail, Long userId, String role) {
         return JWT.create()
                 .withIssuer(this.issuer)
                 .withIssuedAt(new Date())
                 .withNotBefore(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + this.expire * 1000))
-                .withClaim(USER_CLAIM, user)
-                .withClaim(NAME_CLAIM, name)
+                .withClaim(USER_EMAIL_CLAIM, userEmail)
+                .withClaim(USER_ID_CLAIM, userId)
                 .withClaim(ROLE_CLAIM, role)
                 .sign(Algorithm.HMAC256(this.secret));
     }
 
-    public String user(String authorization) {
+    public String userEmail(String authorization) {
         return this.verify(authorization)
-                .map(jwt -> jwt.getClaim(USER_CLAIM).asString())
+                .map(jwt -> jwt.getClaim(USER_EMAIL_CLAIM).asString())
                 .orElse("");
     }
 
-    public String name(String authorization) {
+    public Long userId(String authorization) {
         return this.verify(authorization)
-                .map(jwt -> jwt.getClaim(NAME_CLAIM).asString())
-                .orElse("");
+                .map(jwt -> jwt.getClaim(USER_ID_CLAIM).asLong())
+                .orElse(-1L);
     }
 
     public String role(String authorization) {
