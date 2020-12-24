@@ -1,11 +1,18 @@
 package co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class UserTokenResponse {
 
-    private final String token;
+    private String token;
+
+    public static UserTokenResponse of(String token){
+        return new UserTokenResponse(token);
+    }
 }

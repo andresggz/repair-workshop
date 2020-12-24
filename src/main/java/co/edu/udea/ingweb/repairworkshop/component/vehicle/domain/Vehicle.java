@@ -20,7 +20,7 @@ import java.util.Set;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -38,13 +38,11 @@ public class Vehicle {
     @ManyToMany
     private Set<User> owners;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 

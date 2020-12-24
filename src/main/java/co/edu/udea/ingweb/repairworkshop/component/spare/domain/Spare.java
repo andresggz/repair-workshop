@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Spare {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -33,19 +33,18 @@ public class Spare {
     private String description;
 
     @NotNull
-    private BigDecimal unitPrice;
+    private Long unitPrice;
 
-    @NotNull BigDecimal unitCost;
+    @NotNull
+    private Long unitCost;
 
     private Long stock;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 }

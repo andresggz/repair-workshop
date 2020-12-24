@@ -21,7 +21,7 @@ import java.util.Set;
 public class RepairLine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
@@ -33,21 +33,19 @@ public class RepairLine {
 
     private BigDecimal workforcePrice;
 
-    private BigDecimal totalSparePrice;
+    private Long totalSparePrice;
 
-    private BigDecimal totalSpareCost;
+    private Long totalSpareCost;
 
     private LocalDateTime startedAt;
 
     private LocalDateTime finishedAt;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 }

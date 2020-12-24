@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ import java.util.Set;
 public class Repair {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private RepairState state;
@@ -38,17 +37,15 @@ public class Repair {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<RepairLine> repairLines;
 
-    private BigDecimal totalPrice;
+    private Long totalPrice;
 
-    private BigDecimal totalCost;
+    private Long totalCost;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 

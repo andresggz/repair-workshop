@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
@@ -41,6 +43,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String MESSAGE_INVALID_NUMBER_FIELD = "The value '%s' is not a number";
     private static final String MESSAGE_INVALID_PROPERTY = "This value [%s] is invalid for field '%s'";
     private static final String PRECONDITION_FAILED = "Precondition failed";
+    private static final String ACCESS_DENIED = "Access is denied. Not authorized for this resource";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorDetails> handleConstraintViolation(ConstraintViolationException ex,
@@ -160,6 +163,14 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), PRECONDITION_FAILED, ex.getMessage(),
                 req.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.PRECONDITION_FAILED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDetails> handleAccessDeniedException(final NativeWebRequest req,
+                                                                    final AccessDeniedException ex){
+        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), ACCESS_DENIED, ex.getMessage(),
+                req.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
     private String getErrors(BindingResult bindingResult) {

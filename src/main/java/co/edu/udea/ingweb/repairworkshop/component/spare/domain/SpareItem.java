@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class SpareItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -32,17 +32,15 @@ public class SpareItem {
 
     private Long quantity;
 
-    private BigDecimal totalPrice;
+    private Long totalPrice;
 
-    private BigDecimal totalCost;
+    private Long totalCost;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 }
