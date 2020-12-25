@@ -1,17 +1,17 @@
 package co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1;
 
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
-import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.*;
+import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.UserListResponse;
+import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.UserQuerySearchRequest;
+import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.UserSaveRequest;
+import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.UserSaveResponse;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.GetUserQuery;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.LoginUserUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.RegisterUserUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserSaveCmd;
-import co.edu.udea.ingweb.repairworkshop.component.user.domain.Role;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,15 +19,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

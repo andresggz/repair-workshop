@@ -6,7 +6,6 @@ import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.Loa
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.RegisterUserPort;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
