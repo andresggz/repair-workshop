@@ -1,6 +1,5 @@
 package co.edu.udea.ingweb.repairworkshop.component.spare.domain;
 
-import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;

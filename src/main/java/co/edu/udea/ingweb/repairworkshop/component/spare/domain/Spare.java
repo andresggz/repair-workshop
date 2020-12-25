@@ -1,13 +1,12 @@
 package co.edu.udea.ingweb.repairworkshop.component.spare.domain;
 
-import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,12 +32,18 @@ public class Spare {
     private String description;
 
     @NotNull
+    @Min(value = 0)
     private Long unitPrice;
 
     @NotNull
+    @Min(value = 0)
     private Long unitCost;
 
+    @NotNull
+    @Min(value = 0)
     private Long stock;
+
+    private boolean active;
 
     private Long createdBy;
 

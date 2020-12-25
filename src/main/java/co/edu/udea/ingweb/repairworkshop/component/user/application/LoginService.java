@@ -1,8 +1,8 @@
 package co.edu.udea.ingweb.repairworkshop.component.user.application;
 
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.ResourceNotFoundException;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.LoginUserUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.LoadUserPort;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
@@ -23,7 +23,6 @@ public class LoginService implements LoginUserUseCase {
 
     @Override
     public String loginByEmail(@NotNull String email) {
-
 
         User userLoaded =  this.loadUserPort.loadByParameters(
                 UserQuerySearchCmd
