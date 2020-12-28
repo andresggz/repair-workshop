@@ -22,10 +22,13 @@ public class VehicleListResponse {
 
     private String model;
 
+    private String licensePlate;
+
     public static VehicleListResponse fromModel(Vehicle vehicle){
         return VehicleListResponse.builder()
                 .id(vehicle.getId()).maker(vehicle.getMaker())
                 .vehicleType(vehicle.getVehicleType())
-                .model(vehicle.getModel()).build();
+                .model(vehicle.getModel()).licensePlate(vehicle.getLicensePlate())
+                .build();
     }
 }

@@ -24,7 +24,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUserStatePort {
 
-    private static final String RESOURCE_NOT_FOUND = "User not found";
+    private static final String RESOURCE_NOT_FOUND = "User not found. userId = ";
 
     private final SpringDataUserRepository userRepository;
 
@@ -56,7 +56,7 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     public User loadById(@NotNull Long id) {
 
         User userLoaded = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND + id));
 
         return userLoaded;
     }

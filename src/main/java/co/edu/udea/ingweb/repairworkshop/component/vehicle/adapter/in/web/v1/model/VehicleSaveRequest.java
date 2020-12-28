@@ -33,6 +33,10 @@ public class VehicleSaveRequest {
     @NotEmpty
     private Set<Long> ownerIds = new HashSet<>();
 
+    @NotNull
+    @NotBlank
+    private String licensePlate;
+
     private Long userIdAuthenticated;
 
     public static VehicleSaveCmd toModel(VehicleSaveRequest vehicleToRegister){
@@ -42,6 +46,7 @@ public class VehicleSaveRequest {
                 .model(vehicleToRegister.getModel())
                 .ownerIds(vehicleToRegister.getOwnerIds())
                 .userIdAuthenticated(vehicleToRegister.getUserIdAuthenticated())
+                .licensePlate(vehicleToRegister.getLicensePlate())
                 .build();
     }
 }

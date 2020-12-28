@@ -25,6 +25,8 @@ public class VehicleSaveResponse {
 
     private String model;
 
+    private String licensePlate;
+
     private Long createdBy;
 
     private LocalDateTime createdAt;
@@ -39,6 +41,7 @@ public class VehicleSaveResponse {
                 .vehicleType(vehicle.getVehicleType())
                 .model(vehicle.getModel()).createdBy(vehicle.getCreatedBy())
                 .createdAt(vehicle.getCreatedAt()).updatedAt(vehicle.getUpdatedAt())
+                .licensePlate(vehicle.getLicensePlate())
                 .updatedBy(vehicle.getUpdatedBy()).build();
     }
 }

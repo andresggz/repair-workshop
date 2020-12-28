@@ -36,12 +36,18 @@ public class VehicleSaveCmd {
     @NotEmpty
     private Set<Long> ownerIds = new HashSet<>();
 
+    @NotNull
+    @NotBlank
+    private String licensePlate;
+
     private Long userIdAuthenticated;
 
     public static Vehicle toModel(VehicleSaveCmd vehicleToRegister){
         return Vehicle.builder()
+                .maker(vehicleToRegister.getMaker())
                 .vehicleType(vehicleToRegister.getVehicleType())
                 .model(vehicleToRegister.getModel())
+                .licensePlate(vehicleToRegister.getLicensePlate())
                 .build();
     }
 

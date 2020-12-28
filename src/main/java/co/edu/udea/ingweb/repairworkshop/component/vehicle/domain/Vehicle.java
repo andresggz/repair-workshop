@@ -40,6 +40,11 @@ public class Vehicle {
     @ManyToMany
     private Set<User> owners = new HashSet<>();
 
+    @NotNull
+    @NotBlank
+    @Column(unique = true)
+    private String licensePlate;
+
     private Long createdBy;
 
     private LocalDateTime createdAt;

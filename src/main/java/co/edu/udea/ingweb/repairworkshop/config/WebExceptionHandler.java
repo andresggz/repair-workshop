@@ -5,6 +5,7 @@ import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 @ControllerAdvice
-public class WebExceptionHandler extends ResponseEntityExceptionHandler {
+public class WebExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -46,6 +47,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String ACCESS_DENIED = "Access is denied. Not authorized for this resource";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDetails> handleConstraintViolation(ConstraintViolationException ex,
                                                                   NativeWebRequest request) {
         return new ResponseEntity<>(
@@ -54,6 +56,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDetails> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                      NativeWebRequest request) {
         return new ResponseEntity<>(new ErrorDetails(LocalDate.now(), VALIDATION_FAILED,
@@ -62,6 +65,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorDetails> handleBindingResult(BindException ex, NativeWebRequest request) {
         return new ResponseEntity<>(
                 new ErrorDetails(LocalDate.now(), BAD_REQUEST, getErrors(ex.getBindingResult()),
@@ -70,6 +74,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDetails> handleMessageNotReadableException(HttpMessageNotReadableException ex,
                                                                           NativeWebRequest req) {
         String message = ex.getMessage();
@@ -160,6 +165,14 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ErrorDetails> handleSqlIntegrityConstraintViolationException(final NativeWebRequest req,
                                                                                        final SQLIntegrityConstraintViolationException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), PRECONDITION_FAILED, ex.getMessage(),
+                req.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.PRECONDITION_FAILED);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorDetails> handleSqlIntegrityConstraintViolationException(final NativeWebRequest req,
+                                                                                       final DataIntegrityViolationException ex) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), PRECONDITION_FAILED, ex.getMessage(),
                 req.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.PRECONDITION_FAILED);
