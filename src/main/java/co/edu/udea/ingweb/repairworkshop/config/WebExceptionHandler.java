@@ -173,7 +173,7 @@ public class WebExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorDetails> handleSqlIntegrityConstraintViolationException(final NativeWebRequest req,
                                                                                        final DataIntegrityViolationException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), PRECONDITION_FAILED, ex.getMessage(),
+        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), PRECONDITION_FAILED, ex.getMostSpecificCause().getMessage(),
                 req.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.PRECONDITION_FAILED);
     }
