@@ -1,5 +1,6 @@
 package co.edu.udea.ingweb.repairworkshop.component.vehicle.domain;
 
+import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
@@ -44,6 +45,9 @@ public class Vehicle {
     @NotBlank
     @Column(unique = true)
     private String licensePlate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Repair> repairs = new HashSet<>();
 
     private Long createdBy;
 

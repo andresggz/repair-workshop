@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Repair {
 
     private RepairState state;
 
+    @NotNull
     @NotBlank
     @Size(min = 3, max = 50)
     private String commentary;
@@ -32,7 +34,7 @@ public class Repair {
     private Set<User> repairmen;
 
     @ManyToOne
-    private User ownerEnteredBy;
+    private User owner;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<RepairLine> repairLines;
