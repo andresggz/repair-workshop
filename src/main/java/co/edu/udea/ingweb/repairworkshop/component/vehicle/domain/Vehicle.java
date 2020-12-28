@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,8 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Maker maker;
 
     @NotNull
@@ -36,7 +38,7 @@ public class Vehicle {
     private String model;
 
     @ManyToMany
-    private Set<User> owners;
+    private Set<User> owners = new HashSet<>();
 
     private Long createdBy;
 

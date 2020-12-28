@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "af87fe4f-ab84-478b-8da6-528cef740da7",
+		"name": "repair-workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "andres202045",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "andres@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2MDg4NDMyNzYsInJvbGUiOiJHRVJFTlRFX0dFTkVSQUwiLCJpc3MiOiJpbmctd2ViLXVkZWEiLCJ1c2VyRW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiZXhwIjoxNjA4ODQ2ODc2LCJpYXQiOjE2MDg4NDMyNzYsInVzZXJJZCI6MX0.3V_uKq3lrHgxziWO4f7rpjmuEQfxjVYyA27yWSRouDk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"98635345\",\r\n    \"names\": \"Pablo\",\r\n    \"lastNames\": \"Perez\",\r\n    \"phoneNumber\": \"3334345\",\r\n    \"email\": \"pablo@pablo.com\",\r\n    \"password\": \"generica\",\r\n    \"role\": \"GERENTE_FINANCIERO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "spare",
+			"item": [
+				{
+					"name": "create spare",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Tornillo a53\",\r\n    \"description\": \"Tornillo para motos\",\r\n    \"unitPrice\": 500,\r\n    \"unitCost\": 350,\r\n    \"stock\": 850\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/spares",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"spares"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBy - Spare",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/spares?stockLessThan=850&unitPriceLessThan=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"spares"
+							],
+							"query": [
+								{
+									"key": "stockLessThan",
+									"value": "850"
+								},
+								{
+									"key": "unitPriceLessThan",
+									"value": "500"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2MDkxMTA4NTEsInJvbGUiOiJHRVJFTlRFX0dFTkVSQUwiLCJpc3MiOiJpbmctd2ViLXVkZWEiLCJ1c2VyRW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiZXhwIjoxNjA5MTE0NDUxLCJpYXQiOjE2MDkxMTA4NTEsInVzZXJJZCI6MTAwMH0.x9CObOaWIhPkz-MooIBPfGGykALe0bBQNIl7Baj3st4",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
