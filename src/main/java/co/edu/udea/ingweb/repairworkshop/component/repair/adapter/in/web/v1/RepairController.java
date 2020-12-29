@@ -44,9 +44,8 @@ public class RepairController {
     private final JwtService jwtService;
 
     @PreAuthorize("hasRole('GERENTE_GENERAL')")
-    @PostMapping(path = "/vehicles/{vehicleId}")
+    @PostMapping
     public ResponseEntity<Void> register(@RequestBody @NotNull @Valid RepairSaveRequest vehicleToRegister,
-                                         @NotNull @Valid @PathVariable("vehicleId") Long vehicleId,
                                          HttpServletRequest request){
 
         RepairSaveCmd repairToRegisterCmd = RepairSaveRequest.toModel(vehicleToRegister);
@@ -54,7 +53,7 @@ public class RepairController {
         repairToRegisterCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
 
         Repair repairRegistered =
-                registerRepairUseCase.register(repairToRegisterCmd, vehicleId);
+                registerRepairUseCase.register(repairToRegisterCmd);
 
         URI location = fromUriString("/api/v1/repairs").path("/{id}")
                 .buildAndExpand(repairRegistered.getId()).toUri();

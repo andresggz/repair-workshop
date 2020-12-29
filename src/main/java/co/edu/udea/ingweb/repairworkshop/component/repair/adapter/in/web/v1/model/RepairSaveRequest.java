@@ -29,6 +29,9 @@ public class RepairSaveRequest {
     @NotNull
     private Long ownerId;
 
+    @NotNull
+    private Long vehicleId;
+
     private Long userIdAuthenticated;
 
     public static RepairSaveCmd toModel(RepairSaveRequest repairToRegister){
@@ -36,6 +39,7 @@ public class RepairSaveRequest {
                 .commentary(repairToRegister.getCommentary())
                 .repairmanIds(repairToRegister.getRepairmanIds())
                 .ownerId(repairToRegister.getOwnerId())
+                .vehicleId(repairToRegister.getVehicleId())
                 .userIdAuthenticated(repairToRegister.getUserIdAuthenticated())
                 .build();
     }

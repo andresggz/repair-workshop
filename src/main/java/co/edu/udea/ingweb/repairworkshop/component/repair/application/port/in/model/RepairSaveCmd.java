@@ -25,6 +25,9 @@ public class RepairSaveCmd {
     @NotNull
     private Long ownerId;
 
+    @NotNull
+    private Long vehicleId;
+
     private Long userIdAuthenticated;
 
     public static Repair toModel(RepairSaveCmd repairToRegister){

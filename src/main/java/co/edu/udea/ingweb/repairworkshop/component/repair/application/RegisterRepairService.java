@@ -28,7 +28,7 @@ class RegisterRepairService implements RegisterRepairUseCase {
     private final AddRepairToVehicleUseCase addRepairToVehicleUseCase;
 
     @Override
-    public Repair register(@NotNull RepairSaveCmd repairToRegisterCmd, @NotNull Long vehicleId) {
+    public Repair register(@NotNull RepairSaveCmd repairToRegisterCmd) {
 
         Repair repairToRegister = RepairSaveCmd.toModel(repairToRegisterCmd);
 
@@ -43,7 +43,7 @@ class RegisterRepairService implements RegisterRepairUseCase {
 
         Repair repairRegistered = registerRepairPort.register(repairWithRepairmenToRegister);
 
-        addRepairToVehicleUseCase.addRepair(vehicleId, repairRegistered);
+        addRepairToVehicleUseCase.addRepair(repairToRegisterCmd.getVehicleId(), repairRegistered);
 
         return repairRegistered;
     }

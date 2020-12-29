@@ -7,5 +7,5 @@ import javax.validation.constraints.NotNull;
 
 public interface RegisterRepairUseCase {
 
-    Repair register(@NotNull RepairSaveCmd repairToRegisterCmd, @NotNull Long vehicleId);
+    Repair register(@NotNull RepairSaveCmd repairToRegisterCmd);
 }
