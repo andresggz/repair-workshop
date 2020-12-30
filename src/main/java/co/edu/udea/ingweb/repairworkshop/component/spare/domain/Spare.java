@@ -1,13 +1,12 @@
 package co.edu.udea.ingweb.repairworkshop.component.spare.domain;
 
-import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 public class Spare {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -33,19 +32,24 @@ public class Spare {
     private String description;
 
     @NotNull
-    private BigDecimal unitPrice;
+    @Min(value = 0)
+    private Long unitPrice;
 
-    @NotNull BigDecimal unitCost;
+    @NotNull
+    @Min(value = 0)
+    private Long unitCost;
 
+    @NotNull
+    @Min(value = 0)
     private Long stock;
 
-    @ManyToOne
-    private User createdBy;
+    private boolean active;
+
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 }

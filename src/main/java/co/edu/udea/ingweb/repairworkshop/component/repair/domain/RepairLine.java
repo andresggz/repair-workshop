@@ -9,8 +9,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 @Table(name = "repair_lines")
 @Data
 @Generated
@@ -20,7 +22,7 @@ import java.util.Set;
 public class RepairLine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
@@ -28,25 +30,23 @@ public class RepairLine {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<SpareItem> spareItems;
+    private Set<SpareItem> spareItems = new HashSet<>();
 
-    private BigDecimal workforcePrice;
+    private Long workforcePrice;
 
-    private BigDecimal totalSparePrice;
+    private Long totalSparePrice;
 
-    private BigDecimal totalSpareCost;
+    private Long totalSpareCost;
 
     private LocalDateTime startedAt;
 
     private LocalDateTime finishedAt;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 }

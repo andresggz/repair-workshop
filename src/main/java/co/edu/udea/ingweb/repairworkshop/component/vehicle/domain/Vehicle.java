@@ -1,5 +1,6 @@
 package co.edu.udea.ingweb.repairworkshop.component.vehicle.domain;
 
+import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.*;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,10 +22,11 @@ import java.util.Set;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Maker maker;
 
     @NotNull
@@ -36,15 +39,21 @@ public class Vehicle {
     private String model;
 
     @ManyToMany
-    private Set<User> owners;
+    private Set<User> owners = new HashSet<>();
 
-    @ManyToOne
-    private User createdBy;
+    @NotNull
+    @NotBlank
+    @Column(unique = true)
+    private String licensePlate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Repair> repairs = new HashSet<>();
+
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 

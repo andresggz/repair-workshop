@@ -7,8 +7,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,16 +17,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class User {
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
     @NotBlank
-    @Size(min = 3, max = 10)
-    private String identificationCard;
+    @Size(min = 3, max = 15)
+    private String dni;
 
     @NotNull
     @NotBlank
@@ -38,32 +38,29 @@ public class User {
     @Size(min = 3, max = 30)
     private String lastNames;
 
-    @NotBlank
     @Size(min = 6, max = 15)
     private String phoneNumber;
 
-    @NotBlank
     private String profilePhoto;
 
     @Email
     @NotNull
-    private String primaryEmailAddress;
+    private String email;
 
     @NotNull
     @NotBlank
-    @Size(min = 8, max = 45)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Role role;
 
-    @ManyToOne
-    private User createdBy;
+    private Long createdBy;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    private User updatedBy;
+    private boolean active;
+
+    private Long updatedBy;
 
     private LocalDateTime updatedAt;
 
