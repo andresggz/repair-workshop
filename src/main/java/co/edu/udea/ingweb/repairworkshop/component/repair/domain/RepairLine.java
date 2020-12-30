@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,9 +30,9 @@ public class RepairLine {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<SpareItem> spareItems;
+    private Set<SpareItem> spareItems = new HashSet<>();
 
-    private BigDecimal workforcePrice;
+    private Long workforcePrice;
 
     private Long totalSparePrice;
 

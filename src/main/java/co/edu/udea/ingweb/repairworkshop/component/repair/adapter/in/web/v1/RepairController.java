@@ -1,14 +1,14 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1;
 
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairListResponse;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairSaveRequest;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairSaveResponse;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairQuerySearchRequest;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.*;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddRepairLineToRepairUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.RegisterRepairUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
+import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
 import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
@@ -38,6 +39,8 @@ public class RepairController {
     private final RegisterRepairUseCase registerRepairUseCase;
 
     private final GetRepairQuery getRepairQuery;
+
+    private final AddRepairLineToRepairUseCase addRepairLineToRepairUseCase;
 
     private static final String AUTHORIZATION = "Authorization";
 
@@ -85,6 +88,43 @@ public class RepairController {
 
         return ResponsePagination.fromObject(repairsFoundList, repairsFound.getTotalElements(), repairsFound.getNumber(),
                 repairsFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PostMapping(path = "/{repairId}/repair-lines")
+    public ResponsePagination<RepairLineListResponse> addRepairLineToRepair(@Valid @NotNull @PathVariable("repairId") Long repairId,
+                                                                             @Valid @NotNull @RequestBody RepairLineSaveRequest repairLineToAdd,
+                                                                             HttpServletRequest request){
+
+        RepairLineSaveCmd repairLineToAddCmd = RepairLineSaveRequest.toModel(repairLineToAdd);
+
+        repairLineToAddCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
+        repairLineToAddCmd.setRepairId(repairId);
+
+        Set<RepairLine> repairLinesWithNewRepairLine =
+                addRepairLineToRepairUseCase.addRepairLine(repairLineToAddCmd);
+
+        List<RepairLineListResponse> repairLinesFoundList = repairLinesWithNewRepairLine
+                .stream().map(RepairLineListResponse::fromModel)
+                .collect(Collectors.toList());
+
+        return ResponsePagination.fromObject(repairLinesFoundList, 0, 0,
+                repairLinesFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @GetMapping(path = "/{repairId}/repair-lines")
+    public ResponsePagination<RepairLineListResponse> findRepairLinesByRepairId(@Valid @NotNull @PathVariable("repairId")
+                                                         Long repairId){
+
+        Set<RepairLine> repairLinesFound = getRepairQuery.findRepairLinesByRepairId(repairId);
+
+        List<RepairLineListResponse> repairLinesFoundList = repairLinesFound
+                .stream().map(RepairLineListResponse::fromModel)
+                .collect(Collectors.toList());
+
+        return ResponsePagination.fromObject(repairLinesFoundList, 0, 0,
+                repairLinesFoundList.size());
     }
 
     private Long getUserIdAuthenticated(HttpServletRequest request) {
