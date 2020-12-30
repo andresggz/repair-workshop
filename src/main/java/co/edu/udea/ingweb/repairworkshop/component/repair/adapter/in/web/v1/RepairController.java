@@ -127,6 +127,9 @@ public class RepairController {
                 repairLinesFoundList.size());
     }
 
+    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PatchMapping(path = "/{repairId}/repair-lines/start")
+
     private Long getUserIdAuthenticated(HttpServletRequest request) {
         String token = jwtService.extractToken(request.getHeader(AUTHORIZATION));
         Long userIdAuthenticated = jwtService.userId(token);
