@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,12 +23,12 @@ public class SpareItem {
     private Spare spare;
 
     @NotNull
-    private BigDecimal unitPrice;
+    private Long unitPrice;
 
     @NotNull
-    private BigDecimal unitCost;
+    private Long unitCost;
 
-    private Long quantity;
+    private Integer quantity;
 
     private Long totalPrice;
 
