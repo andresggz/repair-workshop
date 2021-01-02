@@ -55,10 +55,10 @@ class VehiclePersistenceAdapter implements RegisterVehiclePort, LoadVehiclePort,
     @Override
     public Vehicle findById(@NotNull Long id) {
 
-        Vehicle vehicleLoaded = vehicleRepository.findById(id)
+        Vehicle vehicleFound = vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return vehicleLoaded;
+        return vehicleFound;
     }
 
     @Override

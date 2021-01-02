@@ -55,10 +55,10 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     @Override
     public Spare findById(@NotNull Long id) {
 
-        Spare spareLoaded = spareRepository.findById(id)
+        Spare spareFound = spareRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return spareLoaded;
+        return spareFound;
     }
 
     @Override

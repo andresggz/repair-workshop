@@ -24,7 +24,7 @@ public class LoginService implements LoginUserUseCase {
     @Override
     public String loginByEmail(@NotNull String email) {
 
-        User userLoaded =  this.loadUserPort.findByParameters(
+        User userFound =  this.loadUserPort.findByParameters(
                 UserQuerySearchCmd
                         .builder()
                         .email(email)
@@ -32,8 +32,8 @@ public class LoginService implements LoginUserUseCase {
                 .stream()
                 .findFirst().orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        String tokenCreated = jwtService.createToken(userLoaded.getEmail(),
-                            userLoaded.getId(), userLoaded.getRole().name());
+        String tokenCreated = jwtService.createToken(userFound.getEmail(),
+                            userFound.getId(), userFound.getRole().name());
 
         return tokenCreated;
 

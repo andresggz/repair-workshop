@@ -19,8 +19,8 @@ class GetRepairLineService implements GetRepairLineQuery {
     @Override
     public RepairLine findById(@NotNull Long id) {
 
-        RepairLine repairLineLoaded = loadRepairLinePort.findById(id);
+        RepairLine repairLineFound = loadRepairLinePort.findById(id);
 
-        return repairLineLoaded;
+        return repairLineFound;
     }
 }

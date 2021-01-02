@@ -55,10 +55,10 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     @Override
     public User findById(@NotNull Long id) {
 
-        User userLoaded = userRepository.findById(id)
+        User userFound = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND + id));
 
-        return userLoaded;
+        return userFound;
     }
 
     @Override

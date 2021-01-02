@@ -24,25 +24,25 @@ class GetVehicleService implements GetVehicleQuery {
     @Override
     public Vehicle findById(@NotNull Long id) {
 
-        Vehicle vehicleLoaded = loadVehiclePort.findById(id);
+        Vehicle vehicleFound = loadVehiclePort.findById(id);
 
-        return vehicleLoaded;
+        return vehicleFound;
     }
 
     @Override
     public Page<Vehicle> findByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Vehicle> vehiclesLoaded = loadVehiclePort.findByParameters(queryCriteria, pageable);
+        Page<Vehicle> vehiclesFound = loadVehiclePort.findByParameters(queryCriteria, pageable);
 
-        return vehiclesLoaded;
+        return vehiclesFound;
     }
 
     @Override
     public Set<Repair> findRepairsByVehicleId(@NotNull Long id) {
 
-        Vehicle vehicleLoaded = loadVehiclePort.findById(id);
+        Vehicle vehicleFound = loadVehiclePort.findById(id);
 
-        Set<Repair> repairsOfVehicleFound = vehicleLoaded.getRepairs();
+        Set<Repair> repairsOfVehicleFound = vehicleFound.getRepairs();
 
         return repairsOfVehicleFound;
     }

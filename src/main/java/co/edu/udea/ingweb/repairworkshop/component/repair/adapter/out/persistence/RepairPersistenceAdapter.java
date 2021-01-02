@@ -55,10 +55,10 @@ class RepairPersistenceAdapter implements RegisterRepairPort, LoadRepairPort, Up
     @Override
     public Repair findById(@NotNull Long id) {
 
-        Repair repairLoaded = repairRepository.findById(id)
+        Repair repairFound = repairRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return repairLoaded;
+        return repairFound;
     }
 
     @Override

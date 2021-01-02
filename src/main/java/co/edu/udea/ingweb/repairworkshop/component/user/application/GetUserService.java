@@ -22,16 +22,16 @@ class GetUserService implements GetUserQuery {
     @Override
     public User findById(@NotNull Long id) {
 
-        User userLoaded = loadUserPort.findById(id);
+        User userFound = loadUserPort.findById(id);
 
-        return userLoaded;
+        return userFound;
     }
 
     @Override
     public Page<User> findByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<User> usersLoaded = loadUserPort.findByParameters(queryCriteria, pageable);
+        Page<User> usersFound = loadUserPort.findByParameters(queryCriteria, pageable);
 
-        return usersLoaded;
+        return usersFound;
     }
 }

@@ -24,26 +24,26 @@ class GetRepairService implements GetRepairQuery {
     @Override
     public Repair findById(@NotNull Long id) {
 
-        Repair repairLoaded = loadRepairPort.findById(id);
+        Repair repairFound = loadRepairPort.findById(id);
 
-        return repairLoaded;
+        return repairFound;
     }
 
     @Override
     public Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Repair> repairsLoaded = loadRepairPort.findByParameters(queryCriteria, pageable);
+        Page<Repair> repairsFound = loadRepairPort.findByParameters(queryCriteria, pageable);
 
-        return repairsLoaded;
+        return repairsFound;
     }
 
     @Override
     public Set<RepairLine> loadRepairLinesByRepairId(@NotNull Long id) {
 
-        Repair repairLoaded = findById(id);
+        Repair repairFound = findById(id);
 
-        Set<RepairLine> repairLinesLoaded = repairLoaded.getRepairLines();
+        Set<RepairLine> repairLinesFound = repairFound.getRepairLines();
 
-        return repairLinesLoaded;
+        return repairLinesFound;
     }
 }
