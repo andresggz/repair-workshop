@@ -1,6 +1,9 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1;
 
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.*;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveRequest;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveResponse;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemListResponse;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemSaveRequest;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.*;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemRemoveCmd;
@@ -14,8 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +43,8 @@ public class RepairLineController {
     private final UpdateRepairLineStateUseCase updateRepairLineStateUseCase;
 
     private final RemoveSpareItemUseCase removeSpareItemUseCase;
+
+    private final GetRepairLineQuery getRepairLineQuery;
 
     @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/start")
@@ -140,5 +143,38 @@ public class RepairLineController {
         RepairLine repairLineUpdated = updateRepairLineStateUseCase.update(id, repairLineToUpdateCmd);
 
         return ResponseEntity.ok(RepairLineSaveResponse.from(repairLineUpdated));
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @GetMapping(path = "/{repair-line-id}/spare-items")
+    @ApiOperation(value = "Find spare items by repair line id.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
+    public ResponsePagination<SpareItemListResponse> findSpareItemsByRepairLineId(@Valid @NotNull @PathVariable("repair-line-id") Long repairLineId){
+
+        Set<SpareItem> spareItemsFound = getRepairLineQuery.findSpareItemsByRepairLineId(repairLineId);
+
+        List<SpareItemListResponse> spareItemsFoundList = spareItemsFound.stream()
+                .map(SpareItemListResponse::fromModel).collect(Collectors.toList());
+
+        return ResponsePagination.fromObject(spareItemsFoundList, 0, 0, spareItemsFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @GetMapping(path = "/{id}")
+    @ApiOperation(value = "Find repair line by id.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
+    public ResponseEntity<RepairLineSaveResponse> findById(@Valid @PathVariable("id") @NotNull Long id){
+
+       RepairLine repairLineFound = getRepairLineQuery.findById(id);
+
+       return ResponseEntity.ok(RepairLineSaveResponse.from(repairLineFound));
     }
 }

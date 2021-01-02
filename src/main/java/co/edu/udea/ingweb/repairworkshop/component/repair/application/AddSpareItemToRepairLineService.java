@@ -53,14 +53,11 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
 
         updateSpareStatePort.update(spareStockToUpdate);
 
-        getUserQuery.findById(spareItemToAddCmd.getUserIdAuthenticated());
-
         SpareItem spareItemToAdd = SpareItem.builder()
                 .spare(spareInDataBase).unitCost(spareInDataBase.getUnitCost())
                 .unitPrice(spareInDataBase.getUnitPrice()).quantity(spareItemToAddCmd.getQuantity())
                 .updatedAt(LocalDateTime.now()).createdAt(LocalDateTime.now())
-                .createdBy(spareItemToAddCmd.getUserIdAuthenticated())
-                .updatedBy(spareItemToAddCmd.getUserIdAuthenticated()).build();
+                .build();
 
       SpareItem spareItemToBeAdded = spareItemToAdd.toBuilder()
               .totalCost(spareItemToAdd.getUnitCost() * spareItemToAdd.getQuantity())

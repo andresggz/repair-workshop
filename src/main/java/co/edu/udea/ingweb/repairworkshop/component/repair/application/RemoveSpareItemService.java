@@ -35,9 +35,8 @@ class RemoveSpareItemService implements RemoveSpareItemUseCase {
 
         repairLineHasNotFinished(repairLineInDataBase);
 
-       boolean spareItemRemoved = repairLineInDataBase.getSpareItems().remove(SpareItem
-                .builder().id(spareItemToRemoveCmd.getSpareItemId())
-                .build());
+       boolean spareItemRemoved = repairLineInDataBase.getSpareItems().
+               removeIf(spareItem -> spareItem.getId() == spareItemToRemoveCmd.getSpareItemId());
 
         spareItemRemovedSuccessfully(spareItemRemoved);
 

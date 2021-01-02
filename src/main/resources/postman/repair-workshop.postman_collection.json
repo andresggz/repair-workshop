@@ -108,7 +108,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Tornillo a57\",\r\n    \"description\": \"Tornillo para motos\",\r\n    \"unitPrice\": 730,\r\n    \"unitCost\": 510,\r\n    \"stock\": 2800\r\n}",
+							"raw": "{\r\n    \"name\": \"Tornillo a57\",\r\n    \"description\": \"Tornillo para motos\",\r\n    \"unitPrice\": 730,\r\n    \"unitCost\": 510,\r\n    \"stock\": 10\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -159,6 +159,17 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -172,7 +183,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"maker\": \"FORD\",\r\n    \"vehicleType\": \"VAN\",\r\n    \"model\": \"model4\",\r\n    \"licensePlate\": \"AWR-Wd8\",\r\n    \"ownerIds\": [1002, 1003, 1001]\r\n}",
+							"raw": "{\r\n    \"maker\": \"FORD\",\r\n    \"vehicleType\": \"VAN\",\r\n    \"model\": \"model 2020\",\r\n    \"licensePlate\": \"AWR-Wd8\",\r\n    \"ownerIds\": [1002, 1003]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -195,7 +206,7 @@
 					"response": []
 				},
 				{
-					"name": "find by - vehicle",
+					"name": "find by params",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -223,6 +234,50 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "find repairs by vehicle id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/vehicles/1/repairs",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"vehicles",
+								"1",
+								"repairs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update vehicle",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -235,7 +290,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/repairs?createdBeforeThan=2020-11-11",
+							"raw": "localhost:8080/api/v1/repairs",
 							"host": [
 								"localhost"
 							],
@@ -244,12 +299,6 @@
 								"api",
 								"v1",
 								"repairs"
-							],
-							"query": [
-								{
-									"key": "createdBeforeThan",
-									"value": "2020-11-11"
-								}
 							]
 						}
 					},
@@ -299,7 +348,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/repairs/5/repair-lines",
+							"raw": "localhost:8080/api/v1/repairs/2/repair-lines",
 							"host": [
 								"localhost"
 							],
@@ -308,7 +357,7 @@
 								"api",
 								"v1",
 								"repairs",
-								"5",
+								"2",
 								"repair-lines"
 							]
 						}
@@ -317,6 +366,28 @@
 				},
 				{
 					"name": "find repairlines of repair",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/repairs/2/repair-lines",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"repairs",
+								"2",
+								"repair-lines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update repair",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -337,7 +408,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/repair-lines/3/finish",
+							"raw": "localhost:8080/api/v1/repair-lines/3/start",
 							"host": [
 								"localhost"
 							],
@@ -347,7 +418,7 @@
 								"v1",
 								"repair-lines",
 								"3",
-								"finish"
+								"start"
 							]
 						}
 					},
@@ -360,7 +431,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"spareId\": 23,\r\n    \"quantity\": 3000\r\n}",
+							"raw": "{\r\n    \"spareId\": 4,\r\n    \"quantity\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -368,7 +439,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/repair-lines/4/spare-items",
+							"raw": "localhost:8080/api/v1/repair-lines/3/spare-items",
 							"host": [
 								"localhost"
 							],
@@ -377,7 +448,84 @@
 								"api",
 								"v1",
 								"repair-lines",
-								"4",
+								"3",
+								"spare-items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update repairline",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove spare item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/repair-lines/3/spare-items/9",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"repair-lines",
+								"3",
+								"spare-items",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/repair-lines/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"repair-lines",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find spare items by repair id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/repair-lines/3/spare-items",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"repair-lines",
+								"3",
 								"spare-items"
 							]
 						}
@@ -392,7 +540,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2MDk0NTQ2MDgsInJvbGUiOiJHRVJFTlRFX0dFTkVSQUwiLCJpc3MiOiJpbmctd2ViLXVkZWEiLCJ1c2VyRW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiZXhwIjoxNjA5NDU4MjA4LCJpYXQiOjE2MDk0NTQ2MDgsInVzZXJJZCI6MTAwMH0.TGow0T_Xn5lrgRuAwK8cz4404hmsZ8uqEKafUAyppz4",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2MDk2MTMxNjgsInJvbGUiOiJHRyIsImlzcyI6ImluZy13ZWItdWRlYSIsInVzZXJFbWFpbCI6ImFuZHJlc0BnbWFpbC5jb20iLCJleHAiOjE2MDk2MTY3NjgsImlhdCI6MTYwOTYxMzE2OCwidXNlcklkIjoxMDAwfQ.A4r-wD1igru3ykk2VPsmdHSiJtsVLdvhS9jDAptd3AI",
 				"type": "string"
 			}
 		]

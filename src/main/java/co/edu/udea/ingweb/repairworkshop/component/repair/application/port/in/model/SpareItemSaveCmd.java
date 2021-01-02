@@ -14,6 +14,4 @@ public class SpareItemSaveCmd {
     private Long repairLineId;
 
     private Integer quantity;
-
-    private Long userIdAuthenticated;
 }
