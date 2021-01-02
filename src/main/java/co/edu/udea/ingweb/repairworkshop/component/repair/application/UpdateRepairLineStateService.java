@@ -23,7 +23,7 @@ class UpdateRepairLineStateService implements UpdateRepairLineStateUseCase {
     @Override
     public RepairLine update(@NotNull Long id, @NotNull RepairLineSaveCmd repairLineToUpdateCmd) {
 
-        RepairLine repairLineInDataBase = getRepairLineQuery.loadById(id);
+        RepairLine repairLineInDataBase = getRepairLineQuery.findById(id);
 
         RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
                 .description(repairLineToUpdateCmd.getDescription()).build();

@@ -29,7 +29,7 @@ class FinishRepairLineService implements FinishRepairLineUseCase {
     @Override
     public RepairLine finish(@NotNull Long id) {
 
-        RepairLine repairLineInDataBase = getRepairLineQuery.loadById(id);
+        RepairLine repairLineInDataBase = getRepairLineQuery.findById(id);
 
         repairLineHasStarted(repairLineInDataBase);
 

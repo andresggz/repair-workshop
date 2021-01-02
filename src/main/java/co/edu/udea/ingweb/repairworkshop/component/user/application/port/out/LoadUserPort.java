@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public interface LoadUserPort {
 
-    User loadById(@NotNull Long id);
+    User findById(@NotNull Long id);
 
-    Page<User> loadByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
+    Page<User> findByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
 }

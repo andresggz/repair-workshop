@@ -20,7 +20,7 @@ class RepairLinePersistenceAdapter implements LoadRepairLinePort, UpdateRepairLi
 
 
     @Override
-    public RepairLine loadById(@NotNull Long id) {
+    public RepairLine findById(@NotNull Long id) {
 
         RepairLine repairLineLoaded = springDataRepairLineRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(RESOURCE_NOT_FOUND, id)));

@@ -53,7 +53,7 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     }
 
     @Override
-    public User loadById(@NotNull Long id) {
+    public User findById(@NotNull Long id) {
 
         User userLoaded = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND + id));
@@ -62,7 +62,7 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     }
 
     @Override
-    public Page<User> loadByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<User> findByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<User> specification = buildCriteria(queryCriteria);
 

@@ -27,7 +27,7 @@ class StartRepairLineService implements StartRepairLineUseCase {
     @Override
     public RepairLine start(@NotNull Long repairLineToStart) {
 
-        RepairLine repairLineInDataBase = getRepairLineQuery.loadById(repairLineToStart);
+        RepairLine repairLineInDataBase = getRepairLineQuery.findById(repairLineToStart);
 
         repairLineHasNotStarted(repairLineInDataBase);
 

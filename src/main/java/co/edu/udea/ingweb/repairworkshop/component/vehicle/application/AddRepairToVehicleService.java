@@ -22,7 +22,7 @@ class AddRepairToVehicleService implements AddRepairToVehicleUseCase {
     @Override
     public Vehicle addRepair(@NotNull Long vehicleId, @NotNull Repair repairToAdd){
 
-        Vehicle vehicleInDataBase = loadVehiclePort.loadById(vehicleId);
+        Vehicle vehicleInDataBase = loadVehiclePort.findById(vehicleId);
 
         final Set<Repair> repairs = vehicleInDataBase.getRepairs();
         repairs.add(repairToAdd);

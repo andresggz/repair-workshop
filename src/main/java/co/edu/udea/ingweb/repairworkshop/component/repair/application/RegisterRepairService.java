@@ -32,7 +32,7 @@ class RegisterRepairService implements RegisterRepairUseCase {
 
         Repair repairToRegister = RepairSaveCmd.toModel(repairToRegisterCmd);
 
-        repairToRegister.setOwner(loadUserPort.loadById(repairToRegisterCmd.getOwnerId()));
+        repairToRegister.setOwner(loadUserPort.findById(repairToRegisterCmd.getOwnerId()));
         repairToRegister.setState(RepairState.ENTERED);
 
         Repair repairWithRepairmenToRegister = addRepairmen(repairToRegister, repairToRegisterCmd);
@@ -48,7 +48,7 @@ class RegisterRepairService implements RegisterRepairUseCase {
 
         Set<User> repairmenToAdd = vehicleToRegisterCmd
                 .getRepairmanIds().stream()
-                .map(loadUserPort::loadById)
+                .map(loadUserPort::findById)
                 .collect(Collectors.toSet());
 
         Repair repairWithRepairmen = repairToRegister.toBuilder().repairmen(repairmenToAdd).build();

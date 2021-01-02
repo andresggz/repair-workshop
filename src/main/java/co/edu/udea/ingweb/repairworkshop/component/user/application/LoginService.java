@@ -24,7 +24,7 @@ public class LoginService implements LoginUserUseCase {
     @Override
     public String loginByEmail(@NotNull String email) {
 
-        User userLoaded =  this.loadUserPort.loadByParameters(
+        User userLoaded =  this.loadUserPort.findByParameters(
                 UserQuerySearchCmd
                         .builder()
                         .email(email)

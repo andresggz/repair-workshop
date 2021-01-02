@@ -53,7 +53,7 @@ class RepairPersistenceAdapter implements RegisterRepairPort, LoadRepairPort, Up
     }
 
     @Override
-    public Repair loadById(@NotNull Long id) {
+    public Repair findById(@NotNull Long id) {
 
         Repair repairLoaded = repairRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
@@ -62,7 +62,7 @@ class RepairPersistenceAdapter implements RegisterRepairPort, LoadRepairPort, Up
     }
 
     @Override
-    public Page<Repair> loadByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Repair> specification = buildCriteria(queryCriteria);
 

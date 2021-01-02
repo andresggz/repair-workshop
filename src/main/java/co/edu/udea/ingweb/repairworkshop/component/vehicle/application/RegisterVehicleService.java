@@ -39,7 +39,7 @@ class RegisterVehicleService implements RegisterVehicleUseCase {
 
         Set<User> ownersToAdd = vehicleToRegisterCmd
                 .getOwnerIds().stream()
-                .map(loadUserPort::loadById)
+                .map(loadUserPort::findById)
                 .collect(Collectors.toSet());
 
         Vehicle vehicleWithOwners = vehicleToRegister.toBuilder().owners(ownersToAdd).build();

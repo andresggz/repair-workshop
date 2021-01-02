@@ -53,7 +53,7 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     }
 
     @Override
-    public Spare loadById(@NotNull Long id) {
+    public Spare findById(@NotNull Long id) {
 
         Spare spareLoaded = spareRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
@@ -62,7 +62,7 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     }
 
     @Override
-    public Page<Spare> loadByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Spare> findByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Spare> specification = buildCriteria(queryCriteria);
 

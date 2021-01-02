@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        User userFound = this.loadUserPort.loadByParameters(
+        User userFound = this.loadUserPort.findByParameters(
                 UserQuerySearchCmd
                         .builder()
                         .email(email)

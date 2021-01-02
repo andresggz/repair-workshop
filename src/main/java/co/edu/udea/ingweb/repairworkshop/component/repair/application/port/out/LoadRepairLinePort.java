@@ -6,5 +6,5 @@ import javax.validation.constraints.NotNull;
 
 public interface LoadRepairLinePort {
 
-    RepairLine loadById(@NotNull Long id);
+    RepairLine findById(@NotNull Long id);
 }

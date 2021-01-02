@@ -24,7 +24,7 @@ class GetRepairService implements GetRepairQuery {
     @Override
     public Repair findById(@NotNull Long id) {
 
-        Repair repairLoaded = loadRepairPort.loadById(id);
+        Repair repairLoaded = loadRepairPort.findById(id);
 
         return repairLoaded;
     }
@@ -32,13 +32,13 @@ class GetRepairService implements GetRepairQuery {
     @Override
     public Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Repair> repairsLoaded = loadRepairPort.loadByParameters(queryCriteria, pageable);
+        Page<Repair> repairsLoaded = loadRepairPort.findByParameters(queryCriteria, pageable);
 
         return repairsLoaded;
     }
 
     @Override
-    public Set<RepairLine> findRepairLinesByRepairId(@NotNull Long id) {
+    public Set<RepairLine> loadRepairLinesByRepairId(@NotNull Long id) {
 
         Repair repairLoaded = findById(id);
 

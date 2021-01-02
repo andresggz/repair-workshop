@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public interface LoadSparePort {
 
-    Spare loadById(@NotNull Long id);
+    Spare findById(@NotNull Long id);
 
-    Page<Spare> loadByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
+    Page<Spare> findByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
 }

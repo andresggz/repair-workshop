@@ -22,7 +22,7 @@ class GetVehicleService implements GetVehicleQuery {
     @Override
     public Vehicle findById(@NotNull Long id) {
 
-        Vehicle vehicleLoaded = loadVehiclePort.loadById(id);
+        Vehicle vehicleLoaded = loadVehiclePort.findById(id);
 
         return vehicleLoaded;
     }
@@ -30,7 +30,7 @@ class GetVehicleService implements GetVehicleQuery {
     @Override
     public Page<Vehicle> findByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Vehicle> vehiclesLoaded = loadVehiclePort.loadByParameters(queryCriteria, pageable);
+        Page<Vehicle> vehiclesLoaded = loadVehiclePort.findByParameters(queryCriteria, pageable);
 
         return vehiclesLoaded;
     }

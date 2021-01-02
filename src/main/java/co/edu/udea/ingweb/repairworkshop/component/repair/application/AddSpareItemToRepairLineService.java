@@ -42,7 +42,7 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
     @Override
     public Set<SpareItem> addSpareItem(@NotNull SpareItemSaveCmd spareItemToAddCmd) {
 
-        RepairLine repairLineInDataBase = getRepairLineQuery.loadById(spareItemToAddCmd.getRepairLineId());
+        RepairLine repairLineInDataBase = getRepairLineQuery.findById(spareItemToAddCmd.getRepairLineId());
 
         Spare spareInDataBase = getSpareQuery.findById(spareItemToAddCmd.getSpareId());
 

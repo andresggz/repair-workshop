@@ -22,7 +22,7 @@ class GetSpareService implements GetSpareQuery {
     @Override
     public Spare findById(@NotNull Long id) {
 
-        Spare spareLoaded = loadSparePort.loadById(id);
+        Spare spareLoaded = loadSparePort.findById(id);
 
         return spareLoaded;
     }
@@ -30,7 +30,7 @@ class GetSpareService implements GetSpareQuery {
     @Override
     public Page<Spare> findByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Spare> sparesLoaded = loadSparePort.loadByParameters(queryCriteria, pageable);
+        Page<Spare> sparesLoaded = loadSparePort.findByParameters(queryCriteria, pageable);
 
         return sparesLoaded;
     }

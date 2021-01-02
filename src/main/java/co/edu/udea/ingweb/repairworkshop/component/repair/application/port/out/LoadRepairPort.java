@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public interface LoadRepairPort {
 
-    Repair loadById(@NotNull Long id);
+    Repair findById(@NotNull Long id);
 
-    Page<Repair> loadByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
+    Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
 }

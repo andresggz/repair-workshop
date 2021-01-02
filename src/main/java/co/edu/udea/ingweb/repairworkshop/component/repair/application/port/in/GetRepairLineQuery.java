@@ -6,5 +6,5 @@ import javax.validation.constraints.NotNull;
 
 public interface GetRepairLineQuery {
 
-    RepairLine loadById(@NotNull Long id);
+    RepairLine findById(@NotNull Long id);
 }

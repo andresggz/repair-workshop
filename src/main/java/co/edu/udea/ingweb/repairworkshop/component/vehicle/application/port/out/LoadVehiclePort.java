@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public interface LoadVehiclePort {
 
-    Vehicle loadById(@NotNull Long id);
+    Vehicle findById(@NotNull Long id);
 
-    Page<Vehicle> loadByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
+    Page<Vehicle> findByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
 }

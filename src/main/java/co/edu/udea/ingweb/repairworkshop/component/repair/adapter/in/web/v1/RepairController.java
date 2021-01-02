@@ -108,7 +108,7 @@ public class RepairController {
     public ResponsePagination<RepairLineListResponse> findRepairLinesByRepairId(@Valid @NotNull @PathVariable("repairId")
                                                          Long repairId){
 
-        Set<RepairLine> repairLinesFound = getRepairQuery.findRepairLinesByRepairId(repairId);
+        Set<RepairLine> repairLinesFound = getRepairQuery.loadRepairLinesByRepairId(repairId);
 
         List<RepairLineListResponse> repairLinesFoundList = repairLinesFound
                 .stream().map(RepairLineListResponse::fromModel)

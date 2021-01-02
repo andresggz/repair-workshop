@@ -53,7 +53,7 @@ class VehiclePersistenceAdapter implements RegisterVehiclePort, LoadVehiclePort,
     }
 
     @Override
-    public Vehicle loadById(@NotNull Long id) {
+    public Vehicle findById(@NotNull Long id) {
 
         Vehicle vehicleLoaded = vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
@@ -62,7 +62,7 @@ class VehiclePersistenceAdapter implements RegisterVehiclePort, LoadVehiclePort,
     }
 
     @Override
-    public Page<Vehicle> loadByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Vehicle> findByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Vehicle> specification = buildCriteria(queryCriteria);
 

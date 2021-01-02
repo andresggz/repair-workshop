@@ -31,20 +31,15 @@ class AddRepairLineToRepairService implements AddRepairLineToRepairUseCase {
 
         RepairLine repairLineToAdd = RepairLineSaveCmd.toModel(repairLineToAddCmd);
 
-        loadUserPort.loadById(repairLineToAddCmd.getUserIdAuthenticated());
-        repairLineToAdd.setCreatedBy(repairLineToAddCmd.getUserIdAuthenticated());
-
         repairLineToAdd.setCreatedAt(LocalDateTime.now());
         repairLineToAdd.setUpdatedAt(LocalDateTime.now());
 
         Repair repairInDataBase = loadRepairPort
-                .loadById(repairLineToAddCmd.getRepairId());
+                .findById(repairLineToAddCmd.getRepairId());
 
         Repair repairToUpdate = repairInDataBase
                 .toBuilder()
                 .build();
-
-        repairToUpdate.setUpdatedBy(repairLineToAddCmd.getUserIdAuthenticated());
 
         repairToUpdate.getRepairLines().add(repairLineToAdd);
 
