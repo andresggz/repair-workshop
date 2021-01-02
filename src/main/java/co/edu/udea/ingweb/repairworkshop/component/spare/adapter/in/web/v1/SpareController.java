@@ -10,7 +10,6 @@ import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.Reg
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.model.SpareQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.model.SpareSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.Spare;
-import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -39,17 +37,11 @@ public class SpareController {
 
     private final GetSpareQuery getSpareQuery;
 
-    private static final String AUTHORIZATION = "Authorization";
-
-    private final JwtService jwtService;
-
     @PreAuthorize("hasRole('GERENTE_GENERAL')")
     @PostMapping
-    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid SpareSaveRequest spareToRegister, HttpServletRequest request){
+    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid SpareSaveRequest spareToRegister){
 
         SpareSaveCmd spareToRegisterCmd = SpareSaveRequest.toModel(spareToRegister);
-
-        spareToRegisterCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
 
         Spare spareRegistered =
                 registerSpareUseCase.register(spareToRegisterCmd);
@@ -85,12 +77,5 @@ public class SpareController {
         return ResponsePagination.fromObject(sparesFoundList, sparesFound.getTotalElements(), sparesFound.getNumber(),
                 sparesFoundList.size());
     }
-
-    private Long getUserIdAuthenticated(HttpServletRequest request) {
-        String token = jwtService.extractToken(request.getHeader(AUTHORIZATION));
-        Long userIdAuthenticated = jwtService.userId(token);
-        return userIdAuthenticated;
-    }
-
 
 }

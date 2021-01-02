@@ -2,7 +2,6 @@ package co.edu.udea.ingweb.repairworkshop.component.user.application;
 
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.RegisterUserUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserSaveCmd;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.LoadUserPort;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.RegisterUserPort;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,6 @@ class RegisterUserService implements RegisterUserUseCase {
 
     private final RegisterUserPort registerUserPort;
 
-    private final LoadUserPort loadUserPort;
-
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -29,11 +26,6 @@ class RegisterUserService implements RegisterUserUseCase {
         User userToRegister = UserSaveCmd.toModel(userToRegisterCmd);
 
         userToRegister.setPassword(passwordEncoder.encode(userToRegisterCmd.getPassword()));
-
-        loadUserPort.loadById(userToRegisterCmd.getUserIdAuthenticated());
-
-        userToRegister.setCreatedBy(userToRegisterCmd.getUserIdAuthenticated());
-        userToRegister.setUpdatedBy(userToRegisterCmd.getUserIdAuthenticated());
 
         User userRegistered = registerUserPort.register(userToRegister);
 

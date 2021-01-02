@@ -10,7 +10,6 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.mo
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
-import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -42,18 +40,11 @@ public class RepairController {
 
     private final AddRepairLineToRepairUseCase addRepairLineToRepairUseCase;
 
-    private static final String AUTHORIZATION = "Authorization";
-
-    private final JwtService jwtService;
-
     @PreAuthorize("hasRole('GERENTE_GENERAL')")
     @PostMapping
-    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid RepairSaveRequest vehicleToRegister,
-                                         HttpServletRequest request){
+    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid RepairSaveRequest vehicleToRegister){
 
         RepairSaveCmd repairToRegisterCmd = RepairSaveRequest.toModel(vehicleToRegister);
-
-        repairToRegisterCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
 
         Repair repairRegistered =
                 registerRepairUseCase.register(repairToRegisterCmd);
@@ -93,12 +84,9 @@ public class RepairController {
     @PreAuthorize("hasRole('GERENTE_GENERAL')")
     @PostMapping(path = "/{repairId}/repair-lines")
     public ResponsePagination<RepairLineListResponse> addRepairLineToRepair(@Valid @NotNull @PathVariable("repairId") Long repairId,
-                                                                             @Valid @NotNull @RequestBody RepairLineSaveRequest repairLineToAdd,
-                                                                             HttpServletRequest request){
+                                                                             @Valid @NotNull @RequestBody RepairLineSaveRequest repairLineToAdd){
 
         RepairLineSaveCmd repairLineToAddCmd = RepairLineSaveRequest.toModel(repairLineToAdd);
-
-        repairLineToAddCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
         repairLineToAddCmd.setRepairId(repairId);
 
         Set<RepairLine> repairLinesWithNewRepairLine =
@@ -126,15 +114,5 @@ public class RepairController {
         return ResponsePagination.fromObject(repairLinesFoundList, 0, 0,
                 repairLinesFoundList.size());
     }
-
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
-    @PatchMapping(path = "/{repairId}/repair-lines/start")
-
-    private Long getUserIdAuthenticated(HttpServletRequest request) {
-        String token = jwtService.extractToken(request.getHeader(AUTHORIZATION));
-        Long userIdAuthenticated = jwtService.userId(token);
-        return userIdAuthenticated;
-    }
-
 
 }

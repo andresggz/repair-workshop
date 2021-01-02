@@ -32,10 +32,6 @@ class RegisterRepairService implements RegisterRepairUseCase {
 
         Repair repairToRegister = RepairSaveCmd.toModel(repairToRegisterCmd);
 
-        loadUserPort.loadById(repairToRegisterCmd.getUserIdAuthenticated());
-
-        repairToRegister.setCreatedBy(repairToRegisterCmd.getUserIdAuthenticated());
-        repairToRegister.setUpdatedBy(repairToRegisterCmd.getUserIdAuthenticated());
         repairToRegister.setOwner(loadUserPort.loadById(repairToRegisterCmd.getOwnerId()));
         repairToRegister.setState(RepairState.ENTERED);
 

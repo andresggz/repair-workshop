@@ -28,11 +28,6 @@ class RegisterVehicleService implements RegisterVehicleUseCase {
 
         Vehicle vehicleToRegister = VehicleSaveCmd.toModel(vehicleToRegisterCmd);
 
-        loadUserPort.loadById(vehicleToRegisterCmd.getUserIdAuthenticated());
-
-        vehicleToRegister.setCreatedBy(vehicleToRegisterCmd.getUserIdAuthenticated());
-        vehicleToRegister.setUpdatedBy(vehicleToRegisterCmd.getUserIdAuthenticated());
-
         Vehicle vehicleWithOwnersToRegister = addOwners(vehicleToRegister, vehicleToRegisterCmd);
 
         Vehicle vehicleRegistered = registerVehiclePort.register(vehicleWithOwnersToRegister);

@@ -1,17 +1,14 @@
 package co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.model;
 
-import co.edu.udea.ingweb.repairworkshop.component.spare.domain.Spare;
-import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.domain.Maker;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.domain.Vehicle;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.domain.VehicleType;
 import lombok.*;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,8 +36,6 @@ public class VehicleSaveCmd {
     @NotNull
     @NotBlank
     private String licensePlate;
-
-    private Long userIdAuthenticated;
 
     public static Vehicle toModel(VehicleSaveCmd vehicleToRegister){
         return Vehicle.builder()

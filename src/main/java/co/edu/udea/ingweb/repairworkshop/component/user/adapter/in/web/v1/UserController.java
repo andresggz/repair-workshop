@@ -10,7 +10,6 @@ import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.Regi
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
-import co.edu.udea.ingweb.repairworkshop.config.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -39,17 +37,11 @@ public class UserController {
 
     private final GetUserQuery getUserQuery;
 
-    private static final String AUTHORIZATION = "Authorization";
-
-    private final JwtService jwtService;
-
     @PreAuthorize("hasRole('GERENTE_GENERAL')")
     @PostMapping
-    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid UserSaveRequest userToRegister, HttpServletRequest request){
+    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid UserSaveRequest userToRegister){
 
         UserSaveCmd userToRegisterCmd = UserSaveRequest.toModel(userToRegister);
-
-        userToRegisterCmd.setUserIdAuthenticated(getUserIdAuthenticated(request));
 
         User userRegistered =
                 registerUserUseCase.register(userToRegisterCmd);
@@ -84,12 +76,5 @@ public class UserController {
         return ResponsePagination.fromObject(usersFoundList, usersFound.getTotalElements(), usersFound.getNumber(),
                 usersFoundList.size());
     }
-
-    private Long getUserIdAuthenticated(HttpServletRequest request) {
-        String token = jwtService.extractToken(request.getHeader(AUTHORIZATION));
-        Long userIdAuthenticated = jwtService.userId(token);
-        return userIdAuthenticated;
-    }
-
 
 }

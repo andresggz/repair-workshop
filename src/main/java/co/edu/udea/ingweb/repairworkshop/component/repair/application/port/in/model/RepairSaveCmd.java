@@ -28,8 +28,6 @@ public class RepairSaveCmd {
     @NotNull
     private Long vehicleId;
 
-    private Long userIdAuthenticated;
-
     public static Repair toModel(RepairSaveCmd repairToRegister){
         return Repair.builder()
                 .commentary(repairToRegister.getCommentary())

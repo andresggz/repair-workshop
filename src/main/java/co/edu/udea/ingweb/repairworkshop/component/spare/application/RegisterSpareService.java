@@ -25,11 +25,6 @@ class RegisterSpareService implements RegisterSpareUseCase {
 
         Spare spareToRegister = SpareSaveCmd.toModel(spareToRegisterCmd);
 
-        loadUserPort.loadById(spareToRegisterCmd.getUserIdAuthenticated());
-
-        spareToRegister.setCreatedBy(spareToRegisterCmd.getUserIdAuthenticated());
-        spareToRegister.setUpdatedBy(spareToRegisterCmd.getUserIdAuthenticated());
-
         Spare spareRegistered = registerSparePort.register(spareToRegister);
 
         return spareRegistered;
