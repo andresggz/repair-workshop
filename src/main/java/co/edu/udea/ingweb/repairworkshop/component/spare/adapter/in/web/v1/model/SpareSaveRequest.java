@@ -36,8 +36,6 @@ public class SpareSaveRequest {
     @Min(value = 0)
     private Long stock;
 
-    private Long userIdAuthenticated;
-
     public static SpareSaveCmd toModel(SpareSaveRequest spareToRegister){
         return SpareSaveCmd.builder()
                 .name(spareToRegister.getName())
@@ -45,7 +43,6 @@ public class SpareSaveRequest {
                 .unitPrice(spareToRegister.getUnitPrice())
                 .unitCost(spareToRegister.getUnitCost())
                 .stock(spareToRegister.getStock())
-                .userIdAuthenticated(spareToRegister.getUserIdAuthenticated())
                 .build();
     }
 }

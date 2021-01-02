@@ -37,15 +37,12 @@ public class VehicleSaveRequest {
     @NotBlank
     private String licensePlate;
 
-    private Long userIdAuthenticated;
-
     public static VehicleSaveCmd toModel(VehicleSaveRequest vehicleToRegister){
         return VehicleSaveCmd.builder()
                 .maker(vehicleToRegister.getMaker())
                 .vehicleType(vehicleToRegister.getVehicleType())
                 .model(vehicleToRegister.getModel())
                 .ownerIds(vehicleToRegister.getOwnerIds())
-                .userIdAuthenticated(vehicleToRegister.getUserIdAuthenticated())
                 .licensePlate(vehicleToRegister.getLicensePlate())
                 .build();
     }

@@ -6,9 +6,16 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.mo
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemRemoveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
+import co.edu.udea.ingweb.repairworkshop.component.shared.model.ErrorDetails;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/api/v1/repair-lines", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Api(tags = {"Repair lines"}, value = "Repair lines")
 public class RepairLineController {
 
     private final StartRepairLineUseCase startRepairLineUseCase;
@@ -37,6 +45,13 @@ public class RepairLineController {
 
     @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/start")
+    @ApiOperation(value = "Start a repair line service.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 406, message = "Not acceptable.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
     public ResponseEntity<RepairLineSaveResponse> start(@Valid @NotNull @PathVariable("id") Long id){
 
         RepairLine repairLineStarted = startRepairLineUseCase.start(id);
@@ -46,6 +61,13 @@ public class RepairLineController {
 
     @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/finish")
+    @ApiOperation(value = "Finish a repair line service.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 406, message = "Not acceptable.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
     public ResponseEntity<RepairLineSaveResponse> finish(@Valid @NotNull @PathVariable("id") Long id){
 
         RepairLine repairLineStarted = finishRepairLineUseCase.finish(id);
@@ -55,6 +77,13 @@ public class RepairLineController {
 
     @PreAuthorize("hasRole('GG')")
     @PostMapping(path = "/{repair-line-id}/spare-items")
+    @ApiOperation(value = "Add a new spare item to a repair line.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 406, message = "Not acceptable.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
     public ResponsePagination<SpareItemListResponse> addSpareItemToRepairLine(@Valid @NotNull @RequestBody SpareItemSaveRequest spareItemToAdd,
                                                                        @Valid @NotNull @PathVariable("repair-line-id") Long repairLineId){
 
@@ -71,7 +100,14 @@ public class RepairLineController {
 
     @PreAuthorize("hasRole('GG')")
     @DeleteMapping(path = "/{repair-line-id}/spare-items/{spare-item-id}")
-    public ResponsePagination<SpareItemListResponse> removeSpareItemToRepairLine(@Valid @PathVariable("spare-item-id") Long spareItemId,
+    @ApiOperation(value = "Remove a spare item from a repair line.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success."),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 406, message = "Not acceptable.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+    })
+    public ResponsePagination<SpareItemListResponse> removeSpareItemFromRepairLine(@Valid @PathVariable("spare-item-id") Long spareItemId,
                                                                               @Valid @NotNull @PathVariable("repair-line-id") Long repairLineId){
 
         SpareItemRemoveCmd spareItemToRemoveCmd = SpareItemRemoveCmd.builder()
@@ -89,6 +125,13 @@ public class RepairLineController {
 
     @PreAuthorize("hasRole('GG')")
     @PutMapping(path = "/{id}")
+    @ApiOperation(value = "Update a repair line.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success.", response = RepairLineSaveResponse.class),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+
+    })
     public ResponseEntity<RepairLineSaveResponse> update(@Valid @RequestBody @NotNull RepairLineSaveRequest repairLineToUpdate,
                                                          @Valid @PathVariable("id") @NotNull Long id){
 

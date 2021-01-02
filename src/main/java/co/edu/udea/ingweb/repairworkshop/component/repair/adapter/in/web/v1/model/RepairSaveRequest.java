@@ -32,15 +32,12 @@ public class RepairSaveRequest {
     @NotNull
     private Long vehicleId;
 
-    private Long userIdAuthenticated;
-
     public static RepairSaveCmd toModel(RepairSaveRequest repairToRegister){
         return RepairSaveCmd.builder()
                 .commentary(repairToRegister.getCommentary())
                 .repairmanIds(repairToRegister.getRepairmanIds())
                 .ownerId(repairToRegister.getOwnerId())
                 .vehicleId(repairToRegister.getVehicleId())
-                .userIdAuthenticated(repairToRegister.getUserIdAuthenticated())
                 .build();
     }
 }
