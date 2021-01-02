@@ -1,8 +1,8 @@
 package co.edu.udea.ingweb.repairworkshop.config.security.service;
 
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.ResourceNotFoundException;
+import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.GetUserQuery;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.LoadUserPort;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.Role;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private static final String RESOURCE_NOT_FOUND = "User not found";
+    private static final String RESOURCE_NOT_FOUND = "User not found.";
 
-    private final LoadUserPort loadUserPort;
+    private final GetUserQuery getUserQuery;
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        User userFound = this.loadUserPort.findByParameters(
+        User userFound = this.getUserQuery.findByParameters(
                 UserQuerySearchCmd
                         .builder()
                         .email(email)

@@ -27,9 +27,9 @@ class UpdateUserStateService implements UpdateUserStateUseCase {
 
         User userToUpdate = userInDataBase.toBuilder().dni(userToUpdateCmd.getDni())
                 .names(userToUpdateCmd.getNames()).lastNames(userToUpdateCmd.getLastNames())
-                .email(userToUpdateCmd.getEmail()).password(userToUpdateCmd.getPassword())
-                .phoneNumber(userToUpdateCmd.getPhoneNumber()).profilePhoto(userToUpdateCmd.getProfilePhoto())
-                .role(userToUpdateCmd.getRole()).build();
+                .email(userToUpdateCmd.getEmail()).phoneNumber(userToUpdateCmd.getPhoneNumber())
+                .profilePhoto(userToUpdateCmd.getProfilePhoto()).role(userToUpdateCmd.getRole())
+                .build();
 
         User userUpdated = updateUserStatePort.update(userToUpdate);
 

@@ -18,7 +18,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 class StartRepairLineService implements StartRepairLineUseCase {
 
-    private final static String REPAIR_LINE_ALREADY_STARTED = "Repair line already started";
+    private final static String REPAIR_LINE_ALREADY_STARTED = "Repair line already started.";
 
     private final GetRepairLineQuery getRepairLineQuery;
 

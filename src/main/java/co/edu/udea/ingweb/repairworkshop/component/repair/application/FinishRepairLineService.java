@@ -18,9 +18,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 class FinishRepairLineService implements FinishRepairLineUseCase {
 
-    private final static String REPAIR_LINE_ALREADY_FINISHED = "Repair line already finished";
+    private final static String REPAIR_LINE_ALREADY_FINISHED = "Repair line already finished.";
 
-    private final static String REPAIR_LINE_HAS_NOT_STARTED = "Repair line has not started";
+    private final static String REPAIR_LINE_HAS_NOT_STARTED = "Repair line has not started.";
 
     private final GetRepairLineQuery getRepairLineQuery;
 

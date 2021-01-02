@@ -1,14 +1,9 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1;
 
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveRequest;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveResponse;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemListResponse;
-import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemSaveRequest;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddSpareItemToRepairLineUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.FinishRepairLineUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.StartRepairLineUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairLineStateUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.*;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.*;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemRemoveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
@@ -37,6 +32,8 @@ public class RepairLineController {
     private final AddSpareItemToRepairLineUseCase addSpareItemToRepairLineUseCase;
 
     private final UpdateRepairLineStateUseCase updateRepairLineStateUseCase;
+
+    private final RemoveSpareItemUseCase removeSpareItemUseCase;
 
     @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/start")
@@ -67,6 +64,24 @@ public class RepairLineController {
         Set<SpareItem> spareItemsWithNewSpareItem = addSpareItemToRepairLineUseCase.addSpareItem(spareItemToAddCmd);
 
         List<SpareItemListResponse> spareItemsAdded = spareItemsWithNewSpareItem.stream()
+                .map(SpareItemListResponse::fromModel).collect(Collectors.toList());
+
+        return ResponsePagination.fromObject(spareItemsAdded, 0, 0, spareItemsAdded.size());
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @DeleteMapping(path = "/{repair-line-id}/spare-items/{spare-item-id}")
+    public ResponsePagination<SpareItemListResponse> removeSpareItemToRepairLine(@Valid @PathVariable("spare-item-id") Long spareItemId,
+                                                                              @Valid @NotNull @PathVariable("repair-line-id") Long repairLineId){
+
+        SpareItemRemoveCmd spareItemToRemoveCmd = SpareItemRemoveCmd.builder()
+                .spareItemId(spareItemId).repairLineId(repairLineId)
+                .build();
+
+
+        Set<SpareItem> spareItemsWithoutSpareItemRemoved = removeSpareItemUseCase.remove(spareItemToRemoveCmd);
+
+        List<SpareItemListResponse> spareItemsAdded = spareItemsWithoutSpareItemRemoved.stream()
                 .map(SpareItemListResponse::fromModel).collect(Collectors.toList());
 
         return ResponsePagination.fromObject(spareItemsAdded, 0, 0, spareItemsAdded.size());

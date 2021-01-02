@@ -1,5 +1,7 @@
 package co.edu.udea.ingweb.repairworkshop.component.vehicle.adapter.in.web.v1;
 
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairListResponse;
+import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.adapter.in.web.v1.model.VehicleListResponse;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.adapter.in.web.v1.model.VehicleQuerySearchRequest;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
@@ -93,5 +96,17 @@ public class VehicleController {
         return ResponseEntity.ok(VehicleSaveResponse.fromModel(vehicleUpdated));
     }
 
+    @PreAuthorize("hasRole('GG')")
+    @GetMapping(path = "/{id}/repairs")
+    public ResponsePagination<RepairListResponse> findRepairsByVehicleId(@Valid @PathVariable("id") @NotNull Long id){
+
+        Set<Repair> repairsFound = getVehicleQuery.findRepairsByVehicleId(id);
+
+        List<RepairListResponse> repairsFoundList = repairsFound.stream().map(RepairListResponse::fromModel)
+                .collect(Collectors.toList());
+
+        return ResponsePagination.fromObject(repairsFoundList, 0, 0,
+                repairsFoundList.size());
+    }
 
 }

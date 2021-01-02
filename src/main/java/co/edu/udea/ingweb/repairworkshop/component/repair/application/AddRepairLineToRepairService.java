@@ -6,7 +6,6 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.L
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.LoadUserPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +18,6 @@ import java.util.Set;
 @Transactional
 @RequiredArgsConstructor
 class AddRepairLineToRepairService implements AddRepairLineToRepairUseCase {
-
-    private final LoadUserPort loadUserPort;
 
     private final LoadRepairPort loadRepairPort;
 
