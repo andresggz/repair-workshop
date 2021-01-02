@@ -1,7 +1,7 @@
 INSERT INTO users(
 	id, active, dni, email, last_names, names, password, phone_number, profile_photo, role)
 	VALUES (1000, true, '987654631', 'andres@gmail.com', 'Grisales', 'Andres', '$2y$12$h8GZl1Xn1NBsfHDgmM9JZulUGYvj.qEzGuI4i/3pbLK5Om17EBuvS'
-	, '2345687', 'nothing', 'GERENTE_GENERAL');
+	, '2345687', 'nothing', 'GG');
 
 INSERT INTO users(
 	id, active, dni, email, last_names, names, password, phone_number, profile_photo, role)

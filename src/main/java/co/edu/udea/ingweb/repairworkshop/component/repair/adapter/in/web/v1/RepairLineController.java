@@ -1,11 +1,14 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1;
 
+import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveRequest;
 import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.RepairLineSaveResponse;
 import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemListResponse;
 import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.SpareItemSaveRequest;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddSpareItemToRepairLineUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.FinishRepairLineUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.StartRepairLineUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairLineStateUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ResponsePagination;
@@ -33,7 +36,9 @@ public class RepairLineController {
 
     private final AddSpareItemToRepairLineUseCase addSpareItemToRepairLineUseCase;
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    private final UpdateRepairLineStateUseCase updateRepairLineStateUseCase;
+
+    @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/start")
     public ResponseEntity<RepairLineSaveResponse> start(@Valid @NotNull @PathVariable("id") Long id){
 
@@ -42,7 +47,7 @@ public class RepairLineController {
         return ResponseEntity.ok(RepairLineSaveResponse.from(repairLineStarted));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @PatchMapping(path = "/{id}/finish")
     public ResponseEntity<RepairLineSaveResponse> finish(@Valid @NotNull @PathVariable("id") Long id){
 
@@ -51,7 +56,7 @@ public class RepairLineController {
         return ResponseEntity.ok(RepairLineSaveResponse.from(repairLineStarted));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @PostMapping(path = "/{repair-line-id}/spare-items")
     public ResponsePagination<SpareItemListResponse> addSpareItemToRepairLine(@Valid @NotNull @RequestBody SpareItemSaveRequest spareItemToAdd,
                                                                        @Valid @NotNull @PathVariable("repair-line-id") Long repairLineId){
@@ -65,6 +70,17 @@ public class RepairLineController {
                 .map(SpareItemListResponse::fromModel).collect(Collectors.toList());
 
         return ResponsePagination.fromObject(spareItemsAdded, 0, 0, spareItemsAdded.size());
+    }
 
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<RepairLineSaveResponse> update(@Valid @RequestBody @NotNull RepairLineSaveRequest repairLineToUpdate,
+                                                         @Valid @PathVariable("id") @NotNull Long id){
+
+        RepairLineSaveCmd repairLineToUpdateCmd = RepairLineSaveRequest.toModel(repairLineToUpdate);
+
+        RepairLine repairLineUpdated = updateRepairLineStateUseCase.update(id, repairLineToUpdateCmd);
+
+        return ResponseEntity.ok(RepairLineSaveResponse.from(repairLineUpdated));
     }
 }

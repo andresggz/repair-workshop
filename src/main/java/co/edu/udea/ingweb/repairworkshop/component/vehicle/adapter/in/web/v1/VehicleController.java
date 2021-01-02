@@ -7,6 +7,7 @@ import co.edu.udea.ingweb.repairworkshop.component.vehicle.adapter.in.web.v1.mod
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.adapter.in.web.v1.model.VehicleSaveResponse;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.GetVehicleQuery;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.RegisterVehicleUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.UpdateVehicleStateUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.model.VehicleQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.in.model.VehicleSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.domain.Vehicle;
@@ -37,7 +38,9 @@ public class VehicleController {
 
     private final GetVehicleQuery getVehicleQuery;
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    private final UpdateVehicleStateUseCase updateVehicleStateUseCase;
+
+    @PreAuthorize("hasRole('GG')")
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody @NotNull @Valid VehicleSaveRequest vehicleToRegister){
 
@@ -52,7 +55,7 @@ public class VehicleController {
         return ResponseEntity.created(location).build();
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<VehicleSaveResponse> findById(@Valid @PathVariable("id") Long id){
 
@@ -61,7 +64,7 @@ public class VehicleController {
         return ResponseEntity.ok(VehicleSaveResponse.fromModel(vehicleFound));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping
     public ResponsePagination<VehicleListResponse> findByParameters(@Valid @NotNull VehicleQuerySearchRequest queryCriteria,
                                                                     @PageableDefault(page = 0, size = 12,
@@ -76,6 +79,18 @@ public class VehicleController {
 
         return ResponsePagination.fromObject(vehiclesFoundList, vehiclesFound.getTotalElements(), vehiclesFound.getNumber(),
                 vehiclesFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<VehicleSaveResponse> update(@RequestBody @NotNull @Valid VehicleSaveRequest vehicleToUpdate,
+                                                      @Valid @PathVariable("id") @NotNull Long id){
+
+        VehicleSaveCmd vehicleToUpdateCmd = VehicleSaveRequest.toModel(vehicleToUpdate);
+
+        Vehicle vehicleUpdated = updateVehicleStateUseCase.update(id, vehicleToUpdateCmd);
+
+        return ResponseEntity.ok(VehicleSaveResponse.fromModel(vehicleUpdated));
     }
 
 

@@ -7,6 +7,7 @@ import co.edu.udea.ingweb.repairworkshop.component.spare.adapter.in.web.v1.model
 import co.edu.udea.ingweb.repairworkshop.component.spare.adapter.in.web.v1.model.SpareSaveResponse;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.GetSpareQuery;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.RegisterSpareUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.UpdateSpareStateUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.model.SpareQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.model.SpareSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.Spare;
@@ -37,7 +38,9 @@ public class SpareController {
 
     private final GetSpareQuery getSpareQuery;
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    private final UpdateSpareStateUseCase updateSpareStateUseCase;
+
+    @PreAuthorize("hasRole('GG')")
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody @NotNull @Valid SpareSaveRequest spareToRegister){
 
@@ -52,7 +55,7 @@ public class SpareController {
         return ResponseEntity.created(location).build();
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<SpareSaveResponse> findById(@Valid @PathVariable("id") Long id){
 
@@ -61,7 +64,7 @@ public class SpareController {
         return ResponseEntity.ok(SpareSaveResponse.fromModel(spareFound));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping
     public ResponsePagination<SpareListResponse> findByParameters(@Valid @NotNull SpareQuerySearchRequest queryCriteria,
                                                                   @PageableDefault(page = 0, size = 12,
@@ -76,6 +79,18 @@ public class SpareController {
 
         return ResponsePagination.fromObject(sparesFoundList, sparesFound.getTotalElements(), sparesFound.getNumber(),
                 sparesFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<SpareSaveResponse> update(@RequestBody @NotNull @Valid SpareSaveRequest spareToUpdate,
+                                         @Valid @PathVariable("id") @NotNull Long id){
+
+        SpareSaveCmd spareToUpdateCmd = SpareSaveRequest.toModel(spareToUpdate);
+
+        Spare spareUpdated = updateSpareStateUseCase.update(id, spareToUpdateCmd);
+
+        return ResponseEntity.ok(SpareSaveResponse.fromModel(spareUpdated));
     }
 
 }

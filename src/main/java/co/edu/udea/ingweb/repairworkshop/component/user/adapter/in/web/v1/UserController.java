@@ -7,6 +7,7 @@ import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.
 import co.edu.udea.ingweb.repairworkshop.component.user.adapter.in.web.v1.model.UserSaveResponse;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.GetUserQuery;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.RegisterUserUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.UpdateUserStateUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.model.UserSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
@@ -37,7 +38,9 @@ public class UserController {
 
     private final GetUserQuery getUserQuery;
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    private final UpdateUserStateUseCase updateUserStateUseCase;
+
+    @PreAuthorize("hasRole('GG')")
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody @NotNull @Valid UserSaveRequest userToRegister){
 
@@ -52,7 +55,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserSaveResponse> findById(@Valid @PathVariable("id") Long id){
 
@@ -61,7 +64,7 @@ public class UserController {
         return ResponseEntity.ok(UserSaveResponse.fromModel(userFound));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping
     public ResponsePagination<UserListResponse> findByParameters(@Valid @NotNull UserQuerySearchRequest queryCriteria,
                                                                  @PageableDefault(page = 0, size = 12,
@@ -77,4 +80,15 @@ public class UserController {
                 usersFoundList.size());
     }
 
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<UserSaveResponse> update(@RequestBody @NotNull @Valid UserSaveRequest userToUpdate,
+                                                     @Valid @PathVariable("id") @NotNull Long id) {
+
+        UserSaveCmd userToUpdateCmd = UserSaveRequest.toModel(userToUpdate);
+
+        User userUpdated = updateUserStateUseCase.update(id, userToUpdateCmd);
+
+        return ResponseEntity.ok(UserSaveResponse.fromModel(userUpdated));
+    }
 }

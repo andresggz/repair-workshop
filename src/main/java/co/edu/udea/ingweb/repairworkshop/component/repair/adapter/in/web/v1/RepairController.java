@@ -4,6 +4,7 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.mode
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddRepairLineToRepairUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.RegisterRepairUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairStateUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairSaveCmd;
@@ -40,11 +41,13 @@ public class RepairController {
 
     private final AddRepairLineToRepairUseCase addRepairLineToRepairUseCase;
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
-    @PostMapping
-    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid RepairSaveRequest vehicleToRegister){
+    private final UpdateRepairStateUseCase updateRepairStateUseCase;
 
-        RepairSaveCmd repairToRegisterCmd = RepairSaveRequest.toModel(vehicleToRegister);
+    @PreAuthorize("hasRole('GG')")
+    @PostMapping
+    public ResponseEntity<Void> register(@RequestBody @NotNull @Valid RepairSaveRequest repairToRegister){
+
+        RepairSaveCmd repairToRegisterCmd = RepairSaveRequest.toModel(repairToRegister);
 
         Repair repairRegistered =
                 registerRepairUseCase.register(repairToRegisterCmd);
@@ -55,7 +58,7 @@ public class RepairController {
         return ResponseEntity.created(location).build();
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<RepairSaveResponse> findById(@Valid @PathVariable("id") Long id){
 
@@ -64,7 +67,7 @@ public class RepairController {
         return ResponseEntity.ok(RepairSaveResponse.fromModel(repairFound));
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping
     public ResponsePagination<RepairListResponse> findByParameters(@Valid @NotNull RepairQuerySearchRequest queryCriteria,
                                                                    @PageableDefault(page = 0, size = 12,
@@ -81,7 +84,7 @@ public class RepairController {
                 repairsFoundList.size());
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @PostMapping(path = "/{repairId}/repair-lines")
     public ResponsePagination<RepairLineListResponse> addRepairLineToRepair(@Valid @NotNull @PathVariable("repairId") Long repairId,
                                                                              @Valid @NotNull @RequestBody RepairLineSaveRequest repairLineToAdd){
@@ -100,7 +103,7 @@ public class RepairController {
                 repairLinesFoundList.size());
     }
 
-    @PreAuthorize("hasRole('GERENTE_GENERAL')")
+    @PreAuthorize("hasRole('GG')")
     @GetMapping(path = "/{repairId}/repair-lines")
     public ResponsePagination<RepairLineListResponse> findRepairLinesByRepairId(@Valid @NotNull @PathVariable("repairId")
                                                          Long repairId){
@@ -113,6 +116,19 @@ public class RepairController {
 
         return ResponsePagination.fromObject(repairLinesFoundList, 0, 0,
                 repairLinesFoundList.size());
+    }
+
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<RepairSaveResponse> update(@RequestBody @NotNull @Valid RepairSaveRequest repairToUpdate,
+                                       @Valid @PathVariable("id") @NotNull Long id){
+
+        RepairSaveCmd repairToUpdateCmd = RepairSaveRequest.toModel(repairToUpdate);
+
+        Repair repairUpdated =
+                updateRepairStateUseCase.update(id, repairToUpdateCmd);
+
+        return ResponseEntity.ok(RepairSaveResponse.fromModel(repairUpdated));
     }
 
 }
