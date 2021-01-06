@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,9 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     public Spare register(@NotNull Spare spareToRegister) {
 
         final Spare spareToBeRegistered =
-                spareToRegister.toBuilder().createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .active(true).build();
+                spareToRegister.toBuilder()
+                        .active(true)
+                        .build();
 
         final Spare spareRegistered = spareRepository.save(spareToBeRegistered);
 
@@ -44,25 +43,22 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     @Override
     public Spare update(@NotNull Spare spareToUpdate) {
 
-        final Spare spareToBeUpdated =
-                spareToUpdate.toBuilder().updatedAt(LocalDateTime.now()).build();
-
-        final Spare spareUpdated = spareRepository.save(spareToBeUpdated);
+        final Spare spareUpdated = spareRepository.save(spareToUpdate);
 
         return spareUpdated;
     }
 
     @Override
-    public Spare loadById(@NotNull Long id) {
+    public Spare findById(@NotNull Long id) {
 
-        Spare spareLoaded = spareRepository.findById(id)
+        Spare spareFound = spareRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return spareLoaded;
+        return spareFound;
     }
 
     @Override
-    public Page<Spare> loadByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Spare> findByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Spare> specification = buildCriteria(queryCriteria);
 

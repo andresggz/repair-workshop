@@ -17,13 +17,12 @@ public class RepairLineSaveCmd {
     @Size(min = 3, max = 50)
     private String description;
 
-    private Long userIdAuthenticated;
-
     private Long repairId;
 
     public static RepairLine toModel(RepairLineSaveCmd repairLine){
         return RepairLine.builder().
                 description(repairLine.getDescription())
+                .repairId(repairLine.repairId)
                 .build();
     }
 }

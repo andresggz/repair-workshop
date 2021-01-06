@@ -9,13 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class GetRepairService implements GetRepairQuery {
 
@@ -24,26 +22,26 @@ class GetRepairService implements GetRepairQuery {
     @Override
     public Repair findById(@NotNull Long id) {
 
-        Repair repairLoaded = loadRepairPort.loadById(id);
+        Repair repairFound = loadRepairPort.findById(id);
 
-        return repairLoaded;
+        return repairFound;
     }
 
     @Override
     public Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Repair> repairsLoaded = loadRepairPort.loadByParameters(queryCriteria, pageable);
+        Page<Repair> repairsFound = loadRepairPort.findByParameters(queryCriteria, pageable);
 
-        return repairsLoaded;
+        return repairsFound;
     }
 
     @Override
-    public Set<RepairLine> findRepairLinesByRepairId(@NotNull Long id) {
+    public Set<RepairLine> loadRepairLinesByRepairId(@NotNull Long id) {
 
-        Repair repairLoaded = findById(id);
+        Repair repairFound = findById(id);
 
-        Set<RepairLine> repairLinesLoaded = repairLoaded.getRepairLines();
+        Set<RepairLine> repairLinesFound = repairFound.getRepairLines();
 
-        return repairLinesLoaded;
+        return repairLinesFound;
     }
 }

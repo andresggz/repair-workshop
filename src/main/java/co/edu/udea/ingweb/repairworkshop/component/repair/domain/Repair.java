@@ -1,12 +1,14 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.domain;
 
 import co.edu.udea.ingweb.repairworkshop.component.user.domain.User;
+import co.edu.udea.ingweb.repairworkshop.config.security.AuditSecurityConfiguration;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Repair {
+public class Repair implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,12 +45,25 @@ public class Repair {
 
     private Long totalCost;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
-    private Long updatedBy;
+    private String updatedBy;
 
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+    }
 }

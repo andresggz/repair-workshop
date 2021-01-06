@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +30,7 @@ class RepairPersistenceAdapter implements RegisterRepairPort, LoadRepairPort, Up
     @Override
     public Repair register(@NotNull Repair repairToRegister) {
 
-        final Repair repairToBeRegistered =
-                repairToRegister.toBuilder().createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build();
-
-        final Repair repairRegistered = repairRepository.save(repairToBeRegistered);
+        final Repair repairRegistered = repairRepository.save(repairToRegister);
 
         return repairRegistered;
     }
@@ -44,25 +38,22 @@ class RepairPersistenceAdapter implements RegisterRepairPort, LoadRepairPort, Up
     @Override
     public Repair update(@NotNull Repair repairToUpdate) {
 
-        final Repair repairToBeUpdated =
-                repairToUpdate.toBuilder().updatedAt(LocalDateTime.now()).build();
-
-        final Repair repairUpdated = repairRepository.save(repairToBeUpdated);
+        final Repair repairUpdated = repairRepository.save(repairToUpdate);
 
         return repairUpdated;
     }
 
     @Override
-    public Repair loadById(@NotNull Long id) {
+    public Repair findById(@NotNull Long id) {
 
-        Repair repairLoaded = repairRepository.findById(id)
+        Repair repairFound = repairRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return repairLoaded;
+        return repairFound;
     }
 
     @Override
-    public Page<Repair> loadByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Repair> specification = buildCriteria(queryCriteria);
 

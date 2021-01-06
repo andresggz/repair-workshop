@@ -27,11 +27,11 @@ public class VehicleSaveResponse {
 
     private String licensePlate;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
-    private Long updatedBy;
+    private String updatedBy;
 
     private LocalDateTime updatedAt;
 

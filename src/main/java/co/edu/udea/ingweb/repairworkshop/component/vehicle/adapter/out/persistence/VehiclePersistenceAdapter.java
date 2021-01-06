@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +30,7 @@ class VehiclePersistenceAdapter implements RegisterVehiclePort, LoadVehiclePort,
     @Override
     public Vehicle register(@NotNull Vehicle vehicleToRegister) {
 
-        final Vehicle vehicleToBeRegistered =
-                vehicleToRegister.toBuilder().createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build();
-
-        final Vehicle vehicleRegistered = vehicleRepository.save(vehicleToBeRegistered);
+        final Vehicle vehicleRegistered = vehicleRepository.save(vehicleToRegister);
 
         return vehicleRegistered;
     }
@@ -44,25 +38,22 @@ class VehiclePersistenceAdapter implements RegisterVehiclePort, LoadVehiclePort,
     @Override
     public Vehicle update(@NotNull Vehicle vehicleToUpdate) {
 
-        final Vehicle vehicleToBeUpdated =
-                vehicleToUpdate.toBuilder().updatedAt(LocalDateTime.now()).build();
-
-        final Vehicle vehicleUpdated = vehicleRepository.save(vehicleToBeUpdated);
+        final Vehicle vehicleUpdated = vehicleRepository.save(vehicleToUpdate);
 
         return vehicleUpdated;
     }
 
     @Override
-    public Vehicle loadById(@NotNull Long id) {
+    public Vehicle findById(@NotNull Long id) {
 
-        Vehicle vehicleLoaded = vehicleRepository.findById(id)
+        Vehicle vehicleFound = vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND));
 
-        return vehicleLoaded;
+        return vehicleFound;
     }
 
     @Override
-    public Page<Vehicle> loadByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
+    public Page<Vehicle> findByParameters(@NotNull VehicleQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
         Specification<Vehicle> specification = buildCriteria(queryCriteria);
 

@@ -47,8 +47,6 @@ public class UserSaveCmd {
 
     private Role role;
 
-    private Long userIdAuthenticated;
-
     public static User toModel(UserSaveCmd userToRegister){
         return User.builder()
                 .dni(userToRegister.getDni())

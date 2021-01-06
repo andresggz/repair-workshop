@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class GetSpareService implements GetSpareQuery {
 
@@ -22,16 +20,16 @@ class GetSpareService implements GetSpareQuery {
     @Override
     public Spare findById(@NotNull Long id) {
 
-        Spare spareLoaded = loadSparePort.loadById(id);
+        Spare spareFound = loadSparePort.findById(id);
 
-        return spareLoaded;
+        return spareFound;
     }
 
     @Override
     public Page<Spare> findByParameters(@NotNull SpareQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<Spare> sparesLoaded = loadSparePort.loadByParameters(queryCriteria, pageable);
+        Page<Spare> sparesFound = loadSparePort.findByParameters(queryCriteria, pageable);
 
-        return sparesLoaded;
+        return sparesFound;
     }
 }

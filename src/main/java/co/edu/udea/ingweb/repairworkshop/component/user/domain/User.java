@@ -1,5 +1,6 @@
 package co.edu.udea.ingweb.repairworkshop.component.user.domain;
 
+import co.edu.udea.ingweb.repairworkshop.config.security.AuditSecurityConfiguration;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,6 +46,7 @@ public class User implements Serializable {
 
     @Email
     @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotNull
@@ -54,15 +56,27 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private Long createdBy;
+    private boolean active;
+
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
-    private boolean active;
-
-    private Long updatedBy;
+    private String updatedBy;
 
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+    }
 
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = AuditSecurityConfiguration.getDataAuthenticatedUser();
+    }
 }

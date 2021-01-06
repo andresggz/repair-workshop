@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class GetUserService implements GetUserQuery {
 
@@ -22,16 +20,16 @@ class GetUserService implements GetUserQuery {
     @Override
     public User findById(@NotNull Long id) {
 
-        User userLoaded = loadUserPort.loadById(id);
+        User userFound = loadUserPort.findById(id);
 
-        return userLoaded;
+        return userFound;
     }
 
     @Override
     public Page<User> findByParameters(@NotNull UserQuerySearchCmd queryCriteria, @NotNull Pageable pageable) {
 
-        Page<User> usersLoaded = loadUserPort.loadByParameters(queryCriteria, pageable);
+        Page<User> usersFound = loadUserPort.findByParameters(queryCriteria, pageable);
 
-        return usersLoaded;
+        return usersFound;
     }
 }

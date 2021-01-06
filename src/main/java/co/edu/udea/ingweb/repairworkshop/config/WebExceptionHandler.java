@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -184,6 +185,14 @@ public class WebExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
         ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), ACCESS_DENIED, ex.getMessage(),
                 req.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ErrorDetails> handleInvalidDataAccessApiUsageException(final NativeWebRequest req,
+                                                                    final InvalidDataAccessApiUsageException ex){
+        ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(), BAD_REQUEST, ex.getMessage(),
+                req.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     private String getErrors(BindingResult bindingResult) {

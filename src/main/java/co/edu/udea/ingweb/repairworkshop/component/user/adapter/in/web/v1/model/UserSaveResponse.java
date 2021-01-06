@@ -17,18 +17,30 @@ import java.time.LocalDateTime;
 public class UserSaveResponse {
 
     private Long id;
+
     private String dni;
+
     private String names;
+
     private String lastNames;
+
     private String phoneNumber;
+
     private String profilePhoto;
+
     private String email;
+
     private Role role;
-    private Long createdBy;
+
     private LocalDateTime createdAt;
+
     private boolean active;
-    private Long updatedBy;
+
     private LocalDateTime updatedAt;
+
+    private String createdBy;
+
+    private String updatedBy;
 
     public static UserSaveResponse fromModel(User user){
         return UserSaveResponse.builder()

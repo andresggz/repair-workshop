@@ -36,8 +36,6 @@ public class SpareSaveCmd {
     @Min(value = 0)
     private Long stock;
 
-    private Long userIdAuthenticated;
-
     public static Spare toModel(SpareSaveCmd spareToRegister){
         return Spare.builder()
                 .name(spareToRegister.getName())

@@ -15,5 +15,5 @@ public interface GetRepairQuery {
 
     Page<Repair> findByParameters(@NotNull RepairQuerySearchCmd queryCriteria, @NotNull Pageable pageable);
 
-    Set<RepairLine> findRepairLinesByRepairId(@NotNull Long id);
+    Set<RepairLine> loadRepairLinesByRepairId(@NotNull Long id);
 }
