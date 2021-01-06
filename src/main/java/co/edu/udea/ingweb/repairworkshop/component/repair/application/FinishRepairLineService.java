@@ -5,6 +5,7 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.Ge
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairLineStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.BusinessException;
+import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,14 @@ class FinishRepairLineService implements FinishRepairLineUseCase {
 
         RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
                 .finishedAt(LocalDateTime.now())
+                .totalSpareCost(repairLineInDataBase.getSpareItems()
+                        .stream()
+                        .map(SpareItem::getTotalCost)
+                        .reduce(0L, Long::sum))
+                .totalSparePrice(repairLineInDataBase.getSpareItems()
+                        .stream()
+                        .map(SpareItem::getTotalPrice)
+                        .reduce(0L, Long::sum))
                 .build();
 
         RepairLine repairLineFinished = updateRepairLineStatePort.update(repairLineToUpdate);

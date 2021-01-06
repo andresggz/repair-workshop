@@ -5,7 +5,7 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 
 import javax.validation.constraints.NotNull;
 
-public interface UpdateRepairStateUseCase {
+public interface UpdateRepairUseCase {
 
     Repair update(@NotNull Long id, @NotNull RepairSaveCmd repairToUpdateCmd);
 }

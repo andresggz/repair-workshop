@@ -7,11 +7,13 @@ import co.edu.udea.ingweb.repairworkshop.component.vehicle.application.port.out.
 import co.edu.udea.ingweb.repairworkshop.component.vehicle.domain.Vehicle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 class AddRepairToVehicleService implements AddRepairToVehicleUseCase {
 

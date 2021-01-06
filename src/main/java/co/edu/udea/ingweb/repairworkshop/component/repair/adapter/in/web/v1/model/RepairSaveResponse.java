@@ -36,11 +36,11 @@ public class RepairSaveResponse {
 
     private Long totalCost;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
-    private Long updatedBy;
+    private String updatedBy;
 
     private LocalDateTime updatedAt;
 
@@ -51,7 +51,8 @@ public class RepairSaveResponse {
                 .ownerId(repair.getOwner().getId())
                 .repairLineIds(repair.getRepairLines().stream().map(RepairLine::getId).collect(Collectors.toSet()))
                 .totalPrice(repair.getTotalPrice()).totalCost(repair.getTotalCost()).createdBy(repair.getCreatedBy())
-                .createdAt(repair.getCreatedAt()).updatedBy(repair.getUpdatedBy()).updatedAt(repair.getUpdatedAt())
+                .createdAt(repair.getCreatedAt()).updatedBy(repair.getUpdatedBy())
+                .updatedAt(repair.getUpdatedAt())
                 .build();
     }
 }

@@ -16,14 +16,23 @@ import java.time.LocalDateTime;
 public class UserListResponse {
 
     private Long id;
+
     private String dni;
+
     private String names;
+
     private String lastNames;
+
     private String phoneNumber;
+
     private String email;
+
     private Role role;
+
     private LocalDateTime createdAt;
+
     private boolean active;
+
     private LocalDateTime updatedAt;
 
     public static UserListResponse fromModel(User user){

@@ -35,8 +35,21 @@ class RemoveSpareItemService implements RemoveSpareItemUseCase {
 
         repairLineHasNotFinished(repairLineInDataBase);
 
+        SpareItem spareItemToRemove = repairLineInDataBase.getSpareItems()
+                .stream()
+                .filter(repair ->
+                        repair.getId().equals(spareItemToRemoveCmd.getSpareItemId()))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException("Repair item not found"));
+
+        repairLineInDataBase.setTotalSpareCost(repairLineInDataBase.getTotalSpareCost()
+                - spareItemToRemove.getTotalCost() * spareItemToRemove.getQuantity());
+
+        repairLineInDataBase.setTotalSpareCost(repairLineInDataBase.getTotalSparePrice()
+                - spareItemToRemove.getTotalPrice() * spareItemToRemove.getQuantity());
+
        boolean spareItemRemoved = repairLineInDataBase.getSpareItems().
-               removeIf(spareItem -> spareItem.getId() == spareItemToRemoveCmd.getSpareItemId());
+               removeIf(spareItem -> spareItem.getId().equals(spareItemToRemoveCmd.getSpareItemId()));
 
         spareItemRemovedSuccessfully(spareItemRemoved);
 

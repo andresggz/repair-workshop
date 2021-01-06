@@ -1,7 +1,7 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairStateUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Service
 @Transactional
 @RequiredArgsConstructor
-class UpdateRepairStateService implements UpdateRepairStateUseCase {
+class UpdateRepairService implements UpdateRepairUseCase {
 
     private final GetRepairQuery getRepairQuery;
 

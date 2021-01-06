@@ -1,13 +1,11 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1;
 
 import co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model.*;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddRepairLineToRepairUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.RegisterRepairUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.UpdateRepairStateUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.*;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairQuerySearchCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairSaveCmd;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairUpdateStateCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.model.ErrorDetails;
@@ -49,7 +47,9 @@ public class RepairController {
 
     private final AddRepairLineToRepairUseCase addRepairLineToRepairUseCase;
 
-    private final UpdateRepairStateUseCase updateRepairStateUseCase;
+    private final UpdateRepairUseCase updateRepairUseCase;
+
+    private final ChangeRepairStateUseCase changeRepairStateUseCase;
 
     @PreAuthorize("hasRole('GG')")
     @PostMapping
@@ -179,9 +179,30 @@ public class RepairController {
         RepairSaveCmd repairToUpdateCmd = RepairSaveRequest.toModel(repairToUpdate);
 
         Repair repairUpdated =
-                updateRepairStateUseCase.update(id, repairToUpdateCmd);
+                updateRepairUseCase.update(id, repairToUpdateCmd);
 
         return ResponseEntity.ok(RepairSaveResponse.fromModel(repairUpdated));
     }
+
+    @PreAuthorize("hasRole('GG')")
+    @PutMapping(path = "/{id}/state")
+    @ApiOperation(value = "Update state of repair.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success.", response = RepairSaveResponse.class),
+            @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
+            @ApiResponse(code = 404, message = "Resource not found.", response = ErrorDetails.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorDetails.class)
+
+    })
+    public ResponseEntity<RepairSaveResponse> updateState(@RequestBody @NotNull @Valid RepairUpdateStateRequest repairToUpdate,
+                                                     @Valid @PathVariable("id") @NotNull Long id){
+
+        RepairUpdateStateCmd repairStateToUpdateCmd = RepairUpdateStateRequest.toModel(repairToUpdate);
+
+        Repair repairStateUpdated =
+                changeRepairStateUseCase.update(id, repairStateToUpdateCmd);
+
+        return ResponseEntity.ok(RepairSaveResponse.fromModel(repairStateUpdated));
+    }
+
 
 }

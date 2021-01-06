@@ -22,6 +22,7 @@ public class RepairLineSaveCmd {
     public static RepairLine toModel(RepairLineSaveCmd repairLine){
         return RepairLine.builder().
                 description(repairLine.getDescription())
+                .repairId(repairLine.repairId)
                 .build();
     }
 }

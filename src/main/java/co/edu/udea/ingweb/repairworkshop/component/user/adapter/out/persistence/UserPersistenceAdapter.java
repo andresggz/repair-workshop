@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.nonNull;
 
@@ -32,9 +33,10 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     public User register(@NotNull User userToRegister) {
 
         final User userToBeRegistered =
-                userToRegister.toBuilder().createdAt(LocalDateTime.now())
+                userToRegister.toBuilder()
+                        .active(true).createdAt(LocalDateTime.now())
                         .updatedAt(LocalDateTime.now())
-                        .active(true).build();
+                        .build();
 
         final User userRegistered = userRepository.save(userToBeRegistered);
 
@@ -44,8 +46,8 @@ class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUs
     @Override
     public User update(@NotNull User userToUpdate) {
 
-        final User userToBeUpdated =
-                userToUpdate.toBuilder().updatedAt(LocalDateTime.now()).build();
+        User userToBeUpdated = userToUpdate.toBuilder().updatedAt(LocalDateTime.now())
+                .build();
 
         final User userUpdated = userRepository.save(userToBeUpdated);
 

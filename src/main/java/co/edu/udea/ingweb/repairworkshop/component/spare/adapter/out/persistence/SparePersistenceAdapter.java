@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,9 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     public Spare register(@NotNull Spare spareToRegister) {
 
         final Spare spareToBeRegistered =
-                spareToRegister.toBuilder().createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .active(true).build();
+                spareToRegister.toBuilder()
+                        .active(true)
+                        .build();
 
         final Spare spareRegistered = spareRepository.save(spareToBeRegistered);
 
@@ -44,10 +43,7 @@ class SparePersistenceAdapter implements RegisterSparePort, LoadSparePort, Updat
     @Override
     public Spare update(@NotNull Spare spareToUpdate) {
 
-        final Spare spareToBeUpdated =
-                spareToUpdate.toBuilder().updatedAt(LocalDateTime.now()).build();
-
-        final Spare spareUpdated = spareRepository.save(spareToBeUpdated);
+        final Spare spareUpdated = spareRepository.save(spareToUpdate);
 
         return spareUpdated;
     }

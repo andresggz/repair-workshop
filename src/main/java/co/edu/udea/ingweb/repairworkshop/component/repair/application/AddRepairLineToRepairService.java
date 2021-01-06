@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -27,9 +26,6 @@ class AddRepairLineToRepairService implements AddRepairLineToRepairUseCase {
     public Set<RepairLine> addRepairLine(@NotNull RepairLineSaveCmd repairLineToAddCmd) {
 
         RepairLine repairLineToAdd = RepairLineSaveCmd.toModel(repairLineToAddCmd);
-
-        repairLineToAdd.setCreatedAt(LocalDateTime.now());
-        repairLineToAdd.setUpdatedAt(LocalDateTime.now());
 
         Repair repairInDataBase = loadRepairPort
                 .findById(repairLineToAddCmd.getRepairId());

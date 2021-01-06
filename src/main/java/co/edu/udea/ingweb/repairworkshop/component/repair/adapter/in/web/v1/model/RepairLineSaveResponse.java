@@ -1,16 +1,10 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.adapter.in.web.v1.model;
 
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
-import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -34,11 +28,11 @@ public class RepairLineSaveResponse {
 
     private LocalDateTime finishedAt;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
-    private Long updatedBy;
+    private String updatedBy;
 
     private LocalDateTime updatedAt;
 

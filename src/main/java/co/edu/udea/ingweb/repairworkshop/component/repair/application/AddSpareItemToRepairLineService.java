@@ -10,13 +10,11 @@ import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.Get
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.out.UpdateSpareStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.Spare;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.GetUserQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,8 +31,6 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
 
     private final GetSpareQuery getSpareQuery;
 
-    private final GetUserQuery getUserQuery;
-
     private final UpdateRepairLineStatePort updateRepairLineStatePort;
 
     private final UpdateSpareStatePort updateSpareStatePort;
@@ -43,6 +39,8 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
     public Set<SpareItem> addSpareItem(@NotNull SpareItemSaveCmd spareItemToAddCmd) {
 
         RepairLine repairLineInDataBase = getRepairLineQuery.findById(spareItemToAddCmd.getRepairLineId());
+
+        repairLineHasStartedAndNotFinished(repairLineInDataBase);
 
         Spare spareInDataBase = getSpareQuery.findById(spareItemToAddCmd.getSpareId());
 
@@ -56,7 +54,6 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
         SpareItem spareItemToAdd = SpareItem.builder()
                 .spare(spareInDataBase).unitCost(spareInDataBase.getUnitCost())
                 .unitPrice(spareInDataBase.getUnitPrice()).quantity(spareItemToAddCmd.getQuantity())
-                .updatedAt(LocalDateTime.now()).createdAt(LocalDateTime.now())
                 .build();
 
       SpareItem spareItemToBeAdded = spareItemToAdd.toBuilder()
@@ -70,9 +67,10 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
         spareItemsWithNewSpareItem.add(spareItemToBeAdded);
 
       RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
-              .spareItems(spareItemsWithNewSpareItem).build();
-
-      repairLineHasStartedAndNotFinished(repairLineInDataBase);
+              .spareItems(spareItemsWithNewSpareItem)
+              .totalSparePrice(repairLineInDataBase.getTotalSparePrice() + spareItemToBeAdded.getTotalPrice())
+              .totalSpareCost(repairLineInDataBase.getTotalSpareCost() + spareItemToBeAdded.getTotalCost())
+              .build();
 
       RepairLine repairLineUpdated = updateRepairLineStatePort.update(repairLineToUpdate);
 

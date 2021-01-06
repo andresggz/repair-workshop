@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,11 +30,7 @@ class RepairLinePersistenceAdapter implements LoadRepairLinePort, UpdateRepairLi
     @Override
     public RepairLine update(@NotNull RepairLine repairLineToUpdate) {
 
-        RepairLine repairLineToBeUpdated = repairLineToUpdate.toBuilder()
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        RepairLine repairLineUpdated = springDataRepairLineRepository.save(repairLineToBeUpdated);
+        RepairLine repairLineUpdated = springDataRepairLineRepository.save(repairLineToUpdate);
 
         return repairLineUpdated;
     }
