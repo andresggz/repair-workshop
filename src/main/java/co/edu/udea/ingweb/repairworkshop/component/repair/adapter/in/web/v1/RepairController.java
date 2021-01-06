@@ -185,7 +185,7 @@ public class RepairController {
     }
 
     @PreAuthorize("hasRole('GG')")
-    @PutMapping(path = "/{id}/state")
+    @PatchMapping(path = "/{id}/state")
     @ApiOperation(value = "Update state of repair.", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success.", response = RepairSaveResponse.class),
             @ApiResponse(code = 400, message = "Payload is invalid.", response = ErrorDetails.class),
