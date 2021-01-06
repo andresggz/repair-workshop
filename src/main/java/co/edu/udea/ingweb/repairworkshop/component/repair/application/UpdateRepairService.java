@@ -5,7 +5,7 @@ import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.Up
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairSaveCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
-import co.edu.udea.ingweb.repairworkshop.component.user.application.port.out.LoadUserPort;
+import co.edu.udea.ingweb.repairworkshop.component.user.application.port.in.GetUserQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ class UpdateRepairService implements UpdateRepairUseCase {
 
     private final UpdateRepairStatePort updateRepairStatePort;
 
-    private final LoadUserPort loadUserPort;
+    private final GetUserQuery getUserPort;
 
     @Override
     public Repair update(@NotNull Long id, @NotNull RepairSaveCmd repairToUpdateCmd) {
@@ -29,7 +29,7 @@ class UpdateRepairService implements UpdateRepairUseCase {
         Repair repairInDataBase = getRepairQuery.findById(id);
 
         Repair repairToUpdate = repairInDataBase.toBuilder().commentary(repairToUpdateCmd.getCommentary())
-                .owner(loadUserPort.findById(repairToUpdateCmd.getOwnerId()))
+                .owner(getUserPort.findById(repairToUpdateCmd.getOwnerId()))
                 .build();
 
         Repair repairUpdated = updateRepairStatePort.update(repairToUpdate);

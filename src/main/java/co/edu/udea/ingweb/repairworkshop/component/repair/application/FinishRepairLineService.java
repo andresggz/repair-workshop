@@ -2,10 +2,8 @@ package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.FinishRepairLineUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairLineQuery;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairLineStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.BusinessException;
-import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +23,6 @@ class FinishRepairLineService implements FinishRepairLineUseCase {
 
     private final GetRepairLineQuery getRepairLineQuery;
 
-    private final UpdateRepairLineStatePort updateRepairLineStatePort;
-
     @Override
     public RepairLine finish(@NotNull Long id) {
 
@@ -36,21 +32,9 @@ class FinishRepairLineService implements FinishRepairLineUseCase {
 
         repairLineHasNotFinished(repairLineInDataBase);
 
-        RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
-                .finishedAt(LocalDateTime.now())
-                .totalSpareCost(repairLineInDataBase.getSpareItems()
-                        .stream()
-                        .map(SpareItem::getTotalCost)
-                        .reduce(0L, Long::sum))
-                .totalSparePrice(repairLineInDataBase.getSpareItems()
-                        .stream()
-                        .map(SpareItem::getTotalPrice)
-                        .reduce(0L, Long::sum))
-                .build();
+        repairLineInDataBase.setFinishedAt(LocalDateTime.now());
 
-        RepairLine repairLineFinished = updateRepairLineStatePort.update(repairLineToUpdate);
-
-        return repairLineFinished;
+        return repairLineInDataBase;
     }
 
     private void repairLineHasNotFinished(RepairLine repairLineInDataBase) {

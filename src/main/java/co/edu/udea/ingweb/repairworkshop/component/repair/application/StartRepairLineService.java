@@ -3,7 +3,6 @@ package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairLineQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.StartRepairLineUseCase;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairLineStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairState;
@@ -23,9 +22,9 @@ class StartRepairLineService implements StartRepairLineUseCase {
 
     private final static String REPAIR_LINE_ALREADY_STARTED = "Repair line already started.";
 
-    private final GetRepairLineQuery getRepairLineQuery;
+    private final static String REPAIR_NOT_IN_REPAIRING_STATE = "Can not start because repair is not in REPAIRING state";
 
-    private final UpdateRepairLineStatePort updateRepairLineStatePort;
+    private final GetRepairLineQuery getRepairLineQuery;
 
     private final GetRepairQuery getRepairQuery;
 
@@ -36,21 +35,21 @@ class StartRepairLineService implements StartRepairLineUseCase {
 
         Repair repairInDataBase = getRepairQuery.findById(repairLineInDataBase.getRepairId());
 
-        if(!repairInDataBase.getState().equals(RepairState.REPAIRING)){
-            throw new BusinessException("Can not start because repair is not in REPAIRING state");
-        }
+        repairNotInRepairingState(repairInDataBase);
 
         repairLineHasNotStarted(repairLineInDataBase);
 
-        RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
-                .startedAt(LocalDateTime.now())
-                .totalSpareCost(0L)
-                .totalSparePrice(0L)
-                .build();
+        repairLineInDataBase.setStartedAt(LocalDateTime.now());
+        repairLineInDataBase.setTotalSpareCost(0L);
+        repairLineInDataBase.setTotalSparePrice(0L);
 
-        RepairLine repairLineStarted = updateRepairLineStatePort.update(repairLineToUpdate);
+        return repairLineInDataBase;
+    }
 
-        return repairLineStarted;
+    private void repairNotInRepairingState(Repair repairInDataBase) {
+        if(!repairInDataBase.getState().equals(RepairState.REPAIRING)){
+            throw new BusinessException(REPAIR_NOT_IN_REPAIRING_STATE);
+        }
     }
 
     private void repairLineHasNotStarted(RepairLine repairLineInDataBase) {

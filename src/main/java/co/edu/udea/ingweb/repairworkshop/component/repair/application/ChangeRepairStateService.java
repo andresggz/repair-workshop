@@ -3,7 +3,6 @@ package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.ChangeRepairStateUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairUpdateStateCmd;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.LoadRepairPort;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairState;
@@ -26,8 +25,6 @@ class ChangeRepairStateService implements ChangeRepairStateUseCase {
     private static final String REPAIR_CAN_NOT_BE_CANCELED = "Repair already REPAIRED. Can not cancel it";
 
     private final LoadRepairPort loadRepairPort;
-
-    private final UpdateRepairStatePort updateRepairStatePort;
 
     @Override
     public Repair update(@NotNull Long id, @NotNull RepairUpdateStateCmd repairToUpdate) {
@@ -78,7 +75,6 @@ class ChangeRepairStateService implements ChangeRepairStateUseCase {
                 break;
         }
 
-        Repair repairUpdated = updateRepairStatePort.update(repairInDataBase);
-        return repairUpdated;
+        return repairInDataBase;
     }
 }

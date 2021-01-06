@@ -1,9 +1,8 @@
 package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddRepairLineToRepairUseCase;
+import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.RepairLineSaveCmd;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.LoadRepairPort;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.Repair;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import lombok.RequiredArgsConstructor;
@@ -18,28 +17,20 @@ import java.util.Set;
 @RequiredArgsConstructor
 class AddRepairLineToRepairService implements AddRepairLineToRepairUseCase {
 
-    private final LoadRepairPort loadRepairPort;
-
-    private final UpdateRepairStatePort updateRepairStatePort;
+    private final GetRepairQuery getRepairQuery;
 
     @Override
     public Set<RepairLine> addRepairLine(@NotNull RepairLineSaveCmd repairLineToAddCmd) {
 
         RepairLine repairLineToAdd = RepairLineSaveCmd.toModel(repairLineToAddCmd);
 
-        Repair repairInDataBase = loadRepairPort
+        Repair repairInDataBase = getRepairQuery
                 .findById(repairLineToAddCmd.getRepairId());
 
-        Repair repairToUpdate = repairInDataBase
-                .toBuilder()
-                .build();
+        repairInDataBase
+                .getRepairLines()
+                .add(repairLineToAdd);
 
-        repairToUpdate.getRepairLines().add(repairLineToAdd);
-
-        Repair repairUpdated = updateRepairStatePort.update(repairToUpdate);
-
-        Set<RepairLine> repairLinesWithNewRepairLine = repairUpdated.getRepairLines();
-
-        return repairLinesWithNewRepairLine;
+        return repairInDataBase.getRepairLines();
     }
 }

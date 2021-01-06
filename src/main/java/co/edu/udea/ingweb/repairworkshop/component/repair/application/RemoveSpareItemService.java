@@ -3,7 +3,6 @@ package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairLineQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.RemoveSpareItemUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemRemoveCmd;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairLineStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.BusinessException;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
@@ -24,9 +23,9 @@ class RemoveSpareItemService implements RemoveSpareItemUseCase {
 
     private static final String REPAIR_LINE_HAS_FINISHED = "Can not remove because the repair line has already finished";
 
-    private final GetRepairLineQuery getRepairLineQuery;
+    private static final String RESOURCE_NOT_FOUND = "Repair item not found";
 
-    private final UpdateRepairLineStatePort updateRepairLineStatePort;
+    private final GetRepairLineQuery getRepairLineQuery;
 
     @Override
     public Set<SpareItem> remove(@NotNull SpareItemRemoveCmd spareItemToRemoveCmd) {
@@ -40,24 +39,21 @@ class RemoveSpareItemService implements RemoveSpareItemUseCase {
                 .filter(repair ->
                         repair.getId().equals(spareItemToRemoveCmd.getSpareItemId()))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException("Repair item not found"));
+                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
         repairLineInDataBase.setTotalSpareCost(repairLineInDataBase.getTotalSpareCost()
-                - spareItemToRemove.getTotalCost() * spareItemToRemove.getQuantity());
+                - spareItemToRemove.getTotalCost());
 
-        repairLineInDataBase.setTotalSpareCost(repairLineInDataBase.getTotalSparePrice()
-                - spareItemToRemove.getTotalPrice() * spareItemToRemove.getQuantity());
+        repairLineInDataBase.setTotalSparePrice(repairLineInDataBase.getTotalSparePrice()
+                - spareItemToRemove.getTotalPrice());
 
        boolean spareItemRemoved = repairLineInDataBase.getSpareItems().
-               removeIf(spareItem -> spareItem.getId().equals(spareItemToRemoveCmd.getSpareItemId()));
+               removeIf(spareItem ->
+                       spareItem.getId().equals(spareItemToRemoveCmd.getSpareItemId()));
 
         spareItemRemovedSuccessfully(spareItemRemoved);
 
-        RepairLine repairLineUpdated = updateRepairLineStatePort.update(repairLineInDataBase);
-
-        Set<SpareItem> spareItemsWithoutSpareItemRemoved = repairLineUpdated.getSpareItems();
-
-        return spareItemsWithoutSpareItemRemoved;
+        return repairLineInDataBase.getSpareItems();
     }
 
     private void spareItemRemovedSuccessfully(boolean spareItemRemoved) {

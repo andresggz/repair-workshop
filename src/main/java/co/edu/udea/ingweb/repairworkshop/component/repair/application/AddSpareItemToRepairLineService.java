@@ -3,11 +3,9 @@ package co.edu.udea.ingweb.repairworkshop.component.repair.application;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.AddSpareItemToRepairLineUseCase;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.GetRepairLineQuery;
 import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.in.model.SpareItemSaveCmd;
-import co.edu.udea.ingweb.repairworkshop.component.repair.application.port.out.UpdateRepairLineStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.repair.domain.RepairLine;
 import co.edu.udea.ingweb.repairworkshop.component.shared.web.exception.BusinessException;
 import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.in.GetSpareQuery;
-import co.edu.udea.ingweb.repairworkshop.component.spare.application.port.out.UpdateSpareStatePort;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.Spare;
 import co.edu.udea.ingweb.repairworkshop.component.spare.domain.SpareItem;
 import lombok.RequiredArgsConstructor;
@@ -31,50 +29,38 @@ class AddSpareItemToRepairLineService implements AddSpareItemToRepairLineUseCase
 
     private final GetSpareQuery getSpareQuery;
 
-    private final UpdateRepairLineStatePort updateRepairLineStatePort;
-
-    private final UpdateSpareStatePort updateSpareStatePort;
-
     @Override
     public Set<SpareItem> addSpareItem(@NotNull SpareItemSaveCmd spareItemToAddCmd) {
 
         RepairLine repairLineInDataBase = getRepairLineQuery.findById(spareItemToAddCmd.getRepairLineId());
 
-        repairLineHasStartedAndNotFinished(repairLineInDataBase);
-
         Spare spareInDataBase = getSpareQuery.findById(spareItemToAddCmd.getSpareId());
 
+        repairLineHasStartedAndNotFinished(repairLineInDataBase);
         thereIsEnoughStock(spareItemToAddCmd, spareInDataBase);
-
-        Spare spareStockToUpdate = spareInDataBase.toBuilder()
-                .stock(spareInDataBase.getStock() - spareItemToAddCmd.getQuantity()).build();
-
-        updateSpareStatePort.update(spareStockToUpdate);
+        decreaseStock(spareItemToAddCmd, spareInDataBase);
 
         SpareItem spareItemToAdd = SpareItem.builder()
                 .spare(spareInDataBase).unitCost(spareInDataBase.getUnitCost())
                 .unitPrice(spareInDataBase.getUnitPrice()).quantity(spareItemToAddCmd.getQuantity())
                 .build();
 
-      SpareItem spareItemToBeAdded = spareItemToAdd.toBuilder()
-              .totalCost(spareItemToAdd.getUnitCost() * spareItemToAdd.getQuantity())
-              .totalPrice(spareItemToAdd.getUnitPrice() * spareItemToAdd.getQuantity())
-              .build();
+        spareItemToAdd.setTotalCost(spareItemToAdd.getUnitCost() * spareItemToAdd.getQuantity());
+        spareItemToAdd.setTotalPrice(spareItemToAdd.getUnitPrice() * spareItemToAdd.getQuantity());
 
-      Set<SpareItem> spareItemsWithNewSpareItem = repairLineInDataBase
-              .getSpareItems();
 
-        spareItemsWithNewSpareItem.add(spareItemToBeAdded);
+        repairLineInDataBase
+                .getSpareItems()
+                .add(spareItemToAdd);
 
-      RepairLine repairLineToUpdate = repairLineInDataBase.toBuilder()
-              .spareItems(spareItemsWithNewSpareItem)
-              .totalSparePrice(repairLineInDataBase.getTotalSparePrice() + spareItemToBeAdded.getTotalPrice())
-              .totalSpareCost(repairLineInDataBase.getTotalSpareCost() + spareItemToBeAdded.getTotalCost())
-              .build();
+        repairLineInDataBase.setTotalSparePrice(repairLineInDataBase.getTotalSparePrice() + spareItemToAdd.getTotalPrice());
+        repairLineInDataBase.setTotalSpareCost(repairLineInDataBase.getTotalSpareCost() + spareItemToAdd.getTotalCost());
 
-      RepairLine repairLineUpdated = updateRepairLineStatePort.update(repairLineToUpdate);
+        return repairLineInDataBase.getSpareItems();
+    }
 
-        return repairLineUpdated.getSpareItems();
+    private void decreaseStock(SpareItemSaveCmd spareItemToAddCmd, Spare spareInDataBase) {
+        spareInDataBase.setStock(spareInDataBase.getStock() - spareItemToAddCmd.getQuantity());
     }
 
     private void thereIsEnoughStock(SpareItemSaveCmd spareItemToAddCmd, Spare spareInDataBase) {
